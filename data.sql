@@ -45,6 +45,9 @@ INSERT INTO accessible_user VALUES (1, 4, FALSE);
 INSERT INTO accessible_user VALUES (2, 6, FALSE);
 INSERT INTO accessible_user VALUES (3, 2, FALSE);
 INSERT INTO accessible_user VALUES (4, 10, FALSE);
+INSERT INTO accessible_user VALUES (1, 5, FALSE);
+INSERT INTO accessible_user VALUES (9, 1, FALSE);
+INSERT INTO accessible_user VALUES (10, 6, FALSE);
 INSERT INTO accessible_user(list_id, account_id, type) VALUES (6, 8, TRUE);
 INSERT INTO accessible_user(list_id, account_id, type) VALUES (5, 2, TRUE);
 INSERT INTO accessible_user(list_id, account_id, type) VALUES (4, 3, FALSE);
@@ -63,16 +66,16 @@ INSERT INTO accessible_user(list_id, account_id, type) VALUES (2, 7, TRUE);
 INSERT INTO accessible_user(list_id, account_id, type) VALUES (1, 8, TRUE);
 
 -- comment
-INSERT INTO comment VALUES (1, '2015-01-02 12:05:02', , , );
-INSERT INTO comment VALUES (2, '2015-01-02 12:05:02', , , );
-INSERT INTO comment VALUES (3, '2015-01-02 12:05:02', , , );
-INSERT INTO comment VALUES (4, '2015-01-02 12:05:02', , , );
-INSERT INTO comment VALUES (5, '2015-01-02 12:05:02', , , );
-INSERT INTO comment VALUES (6, '2015-01-02 12:05:02', , , );
-INSERT INTO comment VALUES (7, '2015-01-02 12:05:02', , , );
-INSERT INTO comment VALUES (8, '2015-01-02 12:05:02', , , );
-INSERT INTO comment VALUES (9, '2015-01-02 12:05:02', , , );
-INSERT INTO comment VALUES (10, '2015-01-02 12:05:02', , , );
+INSERT INTO comment VALUES (1, '2014-09-02 12:05:22', 'hamster', 2, 3);
+INSERT INTO comment VALUES (2, '2014-12-02 1:05:56', 'I love this class', 5, 1);
+INSERT INTO comment VALUES (3, '2014-01-02 12:05:02', 'ijhi', 4, 2);
+INSERT INTO comment VALUES (4, '2014-05-02 2:02:32', 'hello?', 1, 9);
+INSERT INTO comment VALUES (5, '2014-11-02 8:08:28', 'test', 4, 3);
+INSERT INTO comment VALUES (6, '2014-01-02 3:02:32', 'pig', 6, 8);
+INSERT INTO comment VALUES (7, '2014-11-02 5:01:07', 'dog', 6, 8);
+INSERT INTO comment VALUES (8, '2014-02-02 2:09:46', 'cat', 6, 6);
+INSERT INTO comment VALUES (9, '2014-04-02 3:03:09', 'tiger', 6, 10);
+INSERT INTO comment VALUES (10, '2015-01-02 2:05:02', 'fish', 6, 10);
 
 -- task
 INSERT INTO task(tid, due, name, list_id, last_editor) VALUES (1, '2016-01-01 12:00:00', 'new start of the year', 10, 1);
