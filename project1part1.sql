@@ -13,13 +13,13 @@ CREATE TABLE list (
 CREATE TABLE accessible_user (
   account_id int NOT NULL REFERENCES account(aid) ON DELETE CASCADE,
   list_id int NOT NULL REFERENCES list(lid) ON DELETE CASCADE,
-  type boolean NOT NULL, -- 0 just view, 1 can edit
+  type boolean NOT NULL, -- FALSE just view, TRUE can edit
   UNIQUE (account_id, list_id)
 );
 
 CREATE TABLE comment (
   cid int PRIMARY KEY,
-  since date NOT NULL,
+  since timestamp NOT NULL,
   content text NOT NULL,
   list_id int NOT NULL REFERENCES list(lid) ON DELETE CASCADE,
   sender int NOT NULL,
@@ -28,14 +28,14 @@ CREATE TABLE comment (
 
 CREATE TABLE task (
   tid int PRIMARY KEY,
-  due date,
+  due timestamp,
   description text,
   name text NOT NULL,
   assigned_to int,
   last_editor int NOT NULL,
   list_id int NOT NULL REFERENCES list(lid) ON DELETE CASCADE,
   status boolean DEFAULT FALSE,
-  when_completed date,
+  when_completed timestamp,
   CHECK ((status = TRUE AND when_completed is NOT NULL)
     OR (status = FALSE AND when_completed is NULL)),
   FOREIGN KEY (assigned_to, list_id) REFERENCES accessible_user(account_id, list_id),
@@ -44,7 +44,7 @@ CREATE TABLE task (
 
 
 CREATE TABLE checklist (
-  sid int PRIMARY KEY,
+  cid int PRIMARY KEY,
   status boolean DEFAULT FALSE,
   name text NOT NULL,
   task_id int NOT NULL REFERENCES task(tid) ON DELETE CASCADE
@@ -63,3 +63,6 @@ CREATE TABLE label_task (
   label_id int NOT NULL REFERENCES label(lid),
   UNIQUE (task_id, label_id)
 );
+
+-- To drop all tables
+-- drop table accessible_user, account, checklist, comment, label, label_task, list, task;
