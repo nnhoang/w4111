@@ -1,6 +1,6 @@
 CREATE TABLE account (
   aid int PRIMARY KEY,
-  email text NOT NULL,
+  email text NOT NULL UNIQUE,
   name text NOT NULL
 );
 
@@ -13,11 +13,9 @@ CREATE TABLE list (
 CREATE TABLE accessible_user (
   account_id int NOT NULL REFERENCES account(aid) ON DELETE CASCADE,
   list_id int NOT NULL REFERENCES list(lid) ON DELETE CASCADE,
+  type boolean NOT NULL, -- 0 just view, 1 can edit
   UNIQUE (account_id, list_id)
 );
-
-CREATE TABLE editor (
-) INHERITS (accessible_user);
 
 CREATE TABLE comment (
   cid int PRIMARY KEY,
@@ -34,20 +32,18 @@ CREATE TABLE task (
   description text,
   name text NOT NULL,
   assigned_to int,
-  last_editor int,
+  last_editor int NOT NULL,
   list_id int NOT NULL REFERENCES list(lid) ON DELETE CASCADE,
+  status boolean DEFAULT FALSE,
+  when_completed date,
+  CHECK ((status = TRUE AND when_completed is NOT NULL)
+    OR (status = FALSE AND when_completed is NULL)),
   FOREIGN KEY (assigned_to, list_id) REFERENCES accessible_user(account_id, list_id),
   FOREIGN KEY (last_editor, list_id) REFERENCES accessible_user(account_id, list_id)
 );
 
-CREATE TABLE not_completed_task (
-) INHERITS (task);
 
-CREATE TABLE completed_task (
-  since date NOT NULL
-) INHERITS (task);
-
-CREATE TABLE subtask (
+CREATE TABLE checklist (
   sid int PRIMARY KEY,
   status boolean DEFAULT FALSE,
   name text NOT NULL,
@@ -58,6 +54,7 @@ CREATE TABLE label (
   lid int PRIMARY KEY,
   name text,
   color text,
+  CHECK (color IN ('blue', 'red', 'green', 'orange', 'white', 'black', 'yellow', 'purple')),
   list_id int NOT NULL REFERENCES list(lid) ON DELETE CASCADE
 );
 
