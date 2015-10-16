@@ -66,3 +66,11 @@ CREATE TABLE label_task (
 
 -- To drop all tables
 -- drop table accessible_user, account, checklist, comment, label, label_task, list, task;
+
+
+-- interesting queries
+-- count tasks with different label color by user
+SELECT a.name, l.color FROM account a, label l
+WHERE a.aid = ();
+
+-- the # of completed checklist under a task
