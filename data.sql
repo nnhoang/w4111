@@ -79,15 +79,54 @@ INSERT INTO comment VALUES (10, '2015-01-02 2:05:02', 'fish', 6, 10);
 
 -- task
 INSERT INTO task(tid, due, name, list_id, last_editor) VALUES (1, '2016-01-01 12:00:00', 'new start of the year', 10, 1);
-INSERT INTO task(tid, due, description, name, status, since,list_id, last_editor) VALUES (2, '2015-01-01 12:00:00', 'just trying to generate random data','year 2015', TRUE, '2014-12-30 11:30:00',9, 2);
+INSERT INTO task(tid, due, description, name, status, when_completed,list_id, last_editor) VALUES (2, '2015-01-01 12:00:00', 'just trying to generate random data','year 2015', TRUE, '2014-12-30 11:30:00',9, 2);
 INSERT INTO task(tid, due, name, list_id, last_editor) VALUES (3, '2015-12-01 22:00:00', 'task for list 8', 8, 3);
-INSERT INTO task(tid, due, description, name, status, since,list_id,last_editor) VALUES (4, '2016-01-01 12:00:00', 'inset complete','complete task in 2015', TRUE, '2015-10-16 14:30:00',8, 4);
+INSERT INTO task(tid, due, description, name, status, when_completed,list_id,last_editor) VALUES (4, '2016-01-01 12:00:00', 'inset complete','complete task in 2015', TRUE, '2015-10-16 14:30:00',8, 4);
 INSERT INTO task(tid, due, name, list_id, last_editor) VALUES (5, '2017-12-01 22:00:00', 'task for list 7', 7, 5);
 INSERT INTO task(tid, due, name, list_id, last_editor, assigned_to) VALUES (6, '2016-12-08 12:00:00', 'task for list 6', 6, 6, 8);
 INSERT INTO task(tid, due, name, list_id, last_editor, assigned_to) VALUES (7, '2016-12-08 12:00:00', 'task for list 5', 5, 6, 2);
-INSERT INTO task(tid, due, description, name,  status, since,list_id, last_editor, assigned_to) VALUES (8, '2015-01-01 12:00:00', 'just trying to generate random data','complete task for 4', TRUE, '2014-10-30 11:30:00',4, 2, 3);
+INSERT INTO task(tid, due, description, name,  status, when_completed,list_id, last_editor, assigned_to) VALUES (8, '2015-01-01 12:00:00', 'just trying to generate random data','complete task for 4', TRUE, '2014-10-30 11:30:00',4, 2, 3);
 INSERT INTO task(tid, due, name, description, list_id, last_editor, assigned_to) VALUES (9, '2016-12-08 12:00:00', 'task for list 3','blah blah blah', 3, 6, 2);
 INSERT INTO task(tid, due, name, description, list_id,  last_editor, assigned_to) VALUES (10, '2016-12-08 12:00:00', 'task for list 2', 'hello world again', 2, 7, 1);
 INSERT INTO task(tid, due, name, description, list_id, last_editor, assigned_to) VALUES (11, '2016-12-08 12:00:00', 'task for list 1','hello world', 1, 8, 10);
+
+-- checklist
+INSERT INTO checklist(cid, name, task_id, status) VALUES (1, 'under task 1', 1, TRUE);
+INSERT INTO checklist(cid, name, task_id) VALUES (2, 'under task 2', 2);
+INSERT INTO checklist(cid, name, task_id) VALUES (3, 'under task 3', 3);
+INSERT INTO checklist(cid, name, task_id) VALUES (4, 'under task 4', 4);
+INSERT INTO checklist(cid, name, task_id) VALUES (5, 'under task 5', 5);
+INSERT INTO checklist(cid, name, task_id, status) VALUES (6, 'under task 6', 6, TRUE);
+INSERT INTO checklist(cid, name, task_id, status) VALUES (7, 'under task 7', 7, TRUE);
+INSERT INTO checklist(cid, name, task_id, status) VALUES (8, 'under task 8', 8, TRUE);
+INSERT INTO checklist(cid, name, task_id, status) VALUES (9, 'under task 9', 9, TRUE);
+INSERT INTO checklist(cid, name, task_id, status) VALUES (10, 'under task 10', 10, TRUE);
+
+-- label
+INSERT INTO label(lid, name, color, list_id) VALUES (1, 'important', 'yellow', 1);
+INSERT INTO label(lid, name, color, list_id) VALUES (2, 'important', 'red', 2);
+INSERT INTO label(lid, name, color, list_id) VALUES (3, 'second propriety', 'orange', 1);
+INSERT INTO label(lid, name, color, list_id) VALUES (11, 'second propriety', 'orange', 3);
+INSERT INTO label(lid, name, color, list_id) VALUES (4, 'least', 'white', 4);
+INSERT INTO label(lid, name, color, list_id) VALUES (5, 'second propriety','orange', 5);
+INSERT INTO label(lid, name, color, list_id) VALUES (6, 'least', 'white', 6);
+INSERT INTO label(lid, name, color, list_id) VALUES (7, 'important', 'red', 7);
+INSERT INTO label(lid, name, color, list_id) VALUES (8, 'important', 'red', 8);
+INSERT INTO label(lid, name, color, list_id) VALUES (9, 'important', 'red', 9);
+INSERT INTO label(lid, name, color, list_id) VALUES (10, 'important', 'red', 10);
+
+-- label-task
+INSERT INTO label_task VALUES (1,1);
+INSERT INTO label_task VALUES (1,11);
+INSERT INTO label_task VALUES (2,2);
+INSERT INTO label_task VALUES (2,3);
+INSERT INTO label_task VALUES (3,3);
+INSERT INTO label_task VALUES (4,4);
+INSERT INTO label_task VALUES (5,5);
+INSERT INTO label_task VALUES (6,6);
+INSERT INTO label_task VALUES (7,7);
+INSERT INTO label_task VALUES (8,8);
+INSERT INTO label_task VALUES (9,9);
+INSERT INTO label_task VALUES (10,10);
 
 
