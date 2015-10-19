@@ -85,5 +85,18 @@ WHERE C.list_id = 6 AND C.sender = (SELECT A.aid
                                     FROM account A
                                     WHERE A.name = 'Eugene');
 
+-- join the table of task, label_task and label and select the task that is not complete
+SELECT T.tid, T.list_id, LT.label_id, T.status, L.color
+FROM task T INNER JOIN label_task LT
+ON T.tid = LT.task_id
+INNER JOIN label L
+ON LT.label_id = L.lid
+WHERE T.status = false;
+
+-- find the list of the name of the user who can access list 1
+SELECT A.name
+FROM accessible_user AU INNER JOIN account A
+ON AU.account_id = A.aid
+WHERE AU.list_id = 1;
 
 
