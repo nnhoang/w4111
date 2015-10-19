@@ -1,13 +1,14 @@
 CREATE TABLE account (
   aid int PRIMARY KEY,
   email text NOT NULL UNIQUE,
-  name text NOT NULL
+  name varchar(20) NOT NULL,
+  CHECK (email LIKE '_%@_%._%')
 );
 
 CREATE TABLE list (
   lid int PRIMARY KEY,
   owner int NOT NULL REFERENCES account(aid),
-  name text NOT NULL
+  name varchar(100) NOT NULL
 );
 
 CREATE TABLE accessible_user (
@@ -20,7 +21,7 @@ CREATE TABLE accessible_user (
 CREATE TABLE comment (
   cid int PRIMARY KEY,
   since timestamp NOT NULL,
-  content text NOT NULL,
+  content varchar(1000) NOT NULL,
   list_id int NOT NULL REFERENCES list(lid) ON DELETE CASCADE,
   sender int NOT NULL,
   FOREIGN KEY (sender, list_id) REFERENCES accessible_user(account_id, list_id)
@@ -30,7 +31,7 @@ CREATE TABLE task (
   tid int PRIMARY KEY,
   due timestamp,
   description text,
-  name text NOT NULL,
+  name varchar(100) NOT NULL,
   assigned_to int,
   last_editor int NOT NULL,
   list_id int NOT NULL REFERENCES list(lid) ON DELETE CASCADE,
@@ -46,14 +47,14 @@ CREATE TABLE task (
 CREATE TABLE checklist (
   cid int PRIMARY KEY,
   status boolean DEFAULT FALSE,
-  name text NOT NULL,
+  name varchar(100) NOT NULL,
   task_id int NOT NULL REFERENCES task(tid) ON DELETE CASCADE
 );
 
 CREATE TABLE label (
   lid int PRIMARY KEY,
-  name text,
-  color text,
+  name varchar(20),
+  color varchar(10),
   CHECK (color IN ('blue', 'red', 'green', 'orange', 'white', 'black', 'yellow', 'purple')),
   list_id int NOT NULL REFERENCES list(lid) ON DELETE CASCADE
 );
@@ -64,14 +65,22 @@ CREATE TABLE label_task (
   UNIQUE (task_id, label_id)
 );
 
+
 -- To drop all tables
 -- drop table accessible_user, account, checklist, comment, label, label_task, list, task;
 
 
 -- interesting queries
--- count tasks with different label color by user
-SELECT a.name, l.color FROM account a, label l
-WHERE a.aid = ();
+-- the number of times user 'Eugene' has tasks with different label colors
+SELECT L.color, COUNT(L.color) FROM label L, label_task LT, task T
+WHERE L.lid = LT.label_id
+  AND LT.task_id = T.tid
+  AND T.list_id IN (SELECT DISTINCT AU.list_id
+                    FROM accessible_user AU, account A
+                    WHERE AU.account_id = A.aid 
+                      AND A.name = 'Eugene')
+GROUP BY L.color
+ORDER BY COUNT(L.color) DESC;
 
 -- the # of completed checklist under task 1
 SELECT COUNT(DISTINCT C.cid)
@@ -81,11 +90,13 @@ WHERE C.task_id = 1 AND C.status = true;
 -- the # of comments created by user named 'Eugene'in list 6 
 SELECT COUNT(DISTINCT C.cid)
 FROM comment C
-WHERE C.list_id = 6 AND C.sender = (SELECT A.aid
-                                    FROM account A
-                                    WHERE A.name = 'Eugene');
+WHERE C.list_id = 6
+  AND C.sender = (SELECT A.aid
+                  FROM account A
+                  WHERE A.name = 'Eugene');
 
 -- join the table of task, label_task and label and select the task that is not complete
+-- display information about tasks that are not complete
 SELECT T.tid, T.list_id, LT.label_id, T.status, L.color
 FROM task T INNER JOIN label_task LT
 ON T.tid = LT.task_id
