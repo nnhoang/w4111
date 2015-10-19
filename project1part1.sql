@@ -74,9 +74,16 @@ SELECT a.name, l.color FROM account a, label l
 WHERE a.aid = ();
 
 -- the # of completed checklist under task 1
-SELECT COUNT(C.cid)
-FROM Checklist C
+SELECT COUNT(DISTINCT C.cid)
+FROM checklist C
 WHERE C.task_id = 1 AND C.status = true;
+
+-- the # of comments created by user named 'Eugene'in list 6 
+SELECT COUNT(DISTINCT C.cid)
+FROM comment C
+WHERE C.list_id = 6 AND C.sender = (SELECT A.aid
+                                    FROM account A
+                                    WHERE A.name = 'Eugene');
 
 
 
