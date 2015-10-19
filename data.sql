@@ -40,7 +40,6 @@ INSERT INTO accessible_user VALUES (2, 2, FALSE);
 INSERT INTO accessible_user VALUES (3, 4, FALSE);
 INSERT INTO accessible_user VALUES (4, 4, FALSE);
 INSERT INTO accessible_user VALUES (5, 4, FALSE);
-INSERT INTO accessible_user VALUES (6, 5, FALSE);
 INSERT INTO accessible_user VALUES (1, 4, FALSE);
 INSERT INTO accessible_user VALUES (2, 6, FALSE);
 INSERT INTO accessible_user VALUES (3, 2, FALSE);
@@ -50,9 +49,9 @@ INSERT INTO accessible_user VALUES (9, 1, FALSE);
 INSERT INTO accessible_user VALUES (10, 6, FALSE);
 INSERT INTO accessible_user(list_id, account_id, type) VALUES (6, 8, TRUE);
 INSERT INTO accessible_user(list_id, account_id, type) VALUES (5, 2, TRUE);
-INSERT INTO accessible_user(list_id, account_id, type) VALUES (4, 3, FALSE);
 INSERT INTO accessible_user(list_id, account_id, type) VALUES (2, 1, TRUE);
 INSERT INTO accessible_user(list_id, account_id, type) VALUES (1, 10, FALSE);
+INSERT INTO accessible_user(list_id, account_id, type) VALUES (3, 2, FALSE);
 INSERT INTO accessible_user(list_id, account_id, type) VALUES (10, 1, TRUE);
 INSERT INTO accessible_user(list_id, account_id, type) VALUES (9, 2, TRUE);
 INSERT INTO accessible_user(list_id, account_id, type) VALUES (8, 3, TRUE);
@@ -128,5 +127,7 @@ INSERT INTO label_task VALUES (7,7);
 INSERT INTO label_task VALUES (8,8);
 INSERT INTO label_task VALUES (9,9);
 INSERT INTO label_task VALUES (10,10);
+INSERT INTO label_task VALUES (11,7);
+INSERT INTO label_task VALUES (11,4);
 
 
