@@ -73,4 +73,10 @@ CREATE TABLE label_task (
 SELECT a.name, l.color FROM account a, label l
 WHERE a.aid = ();
 
--- the # of completed checklist under a task
+-- the # of completed checklist under task 1
+SELECT COUNT(C.cid)
+FROM Checklist C
+WHERE C.task_id = 1 AND C.status = true;
+
+
+
