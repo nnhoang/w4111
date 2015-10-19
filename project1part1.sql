@@ -43,7 +43,6 @@ CREATE TABLE task (
   FOREIGN KEY (last_editor, list_id) REFERENCES accessible_user(account_id, list_id)
 );
 
-
 CREATE TABLE checklist (
   cid int PRIMARY KEY,
   status boolean DEFAULT FALSE,
@@ -82,12 +81,12 @@ WHERE L.lid = LT.label_id
 GROUP BY L.color
 ORDER BY COUNT(L.color) DESC;
 
--- the # of completed checklist under task 1
+-- the number of completed checklist under task 1
 SELECT COUNT(DISTINCT C.cid)
 FROM checklist C
 WHERE C.task_id = 1 AND C.status = true;
 
--- the # of comments created by user named 'Eugene'in list 6 
+-- the number of comments created by user named 'Eugene'in list 6 
 SELECT COUNT(DISTINCT C.cid)
 FROM comment C
 WHERE C.list_id = 6
