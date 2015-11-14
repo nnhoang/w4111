@@ -20,10 +20,12 @@ eugene wu 2015
 import os
 from sqlalchemy import *
 from sqlalchemy.pool import NullPool
-from flask import Flask, request, render_template, g, redirect, Response
+from flask import Flask, request, render_template, g, redirect, Response, session, url_for
+from werkzeug.security import generate_password_hash, check_password_hash
 
 tmpl_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
 app = Flask(__name__, template_folder=tmpl_dir)
+app.secret_key = 'IJ*TD B^&RT&D^F S&^FDFGDS&FG** *J*(J(DJSAD?'
 
 
 #
@@ -39,7 +41,8 @@ app = Flask(__name__, template_folder=tmpl_dir)
 #
 #     DATABASEURI = "postgresql://ewu2493:foobar@w4111db1.cloudapp.net:5432/proj1part2"
 #
-DATABASEURI = "postgresql://tz2278:242@w4111db1.cloudapp.net/proj1part2"
+DATABASEURI = "postgresql://nnh2110:627@w4111db1.cloudapp.net/proj1part2"
+# DATABASEURI = "postgresql://tz2278:242@w4111db1.cloudapp.net/proj1part2"
 
 
 #
@@ -69,6 +72,7 @@ engine.execute("""CREATE TABLE IF NOT EXISTS test (
   name text
 );""")
 engine.execute("""INSERT INTO test(name) VALUES ('grace hopper'), ('alan turing'), ('ada lovelace');""")
+engine.execute('INSERT INTO test(name) VALUES (%s), (%s)', 'hehe', 'hoho')
 #
 # END SQLITE SETUP CODE
 #
@@ -175,6 +179,35 @@ def index():
   # for example, the below file reads template/index.html
   #
   return render_template("index.html", **context)
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+  error = None
+  if request.method == 'POST':
+    user = g.conn.execute('SELECT * FROM account WHERE email = %s', request.form['email']).fetchone()
+    if user and check_password_hash(user['password'], request.form['password']):
+      session['aid'] = user['aid']
+      print "success"
+      return redirect(url_for('index'))
+    else:
+      error = 'Invalid email or password'
+  print error
+  return render_template('login.html', error=error)
+
+@app.route('/signup', methods=['POST'])
+def signup():
+  error = None
+  if request.method == 'POST':
+    user = g.conn.execute('SELECT * FROM account WHERE email = %s', request.form['email']).fetchone()
+    if not user:
+      password = generate_password_hash(request.form['password'])
+      g.conn.execute('INSERT INTO account(email, name, password) VALUES (%s, %s, %s)',
+                     request.form['email'], request.form['name'], password)
+    else:
+      error = 'User already exists. Please choose another email address!'
+
+  return render_template('login.html', error=error)
+
 
 #
 # This is an example of a different path.  You can see it at
