@@ -39,7 +39,7 @@ app = Flask(__name__, template_folder=tmpl_dir)
 #
 #     DATABASEURI = "postgresql://ewu2493:foobar@w4111db1.cloudapp.net:5432/proj1part2"
 #
-DATABASEURI = "sqlite:///test.db"
+DATABASEURI = "postgresql://tz2278:242@w4111db1.cloudapp.net:5432/proj1part2"
 
 
 #
@@ -141,6 +141,14 @@ def index():
     names.append(result['name'])  # can also be accessed using result[0]
   cursor.close()
 
+  uid = request.args["userid"];
+  listcursor = g.conn.execute("Select L.name FROM accessible_user AU INNER JOIN list L ON AU.list_id = L.lid INNER JOIN account A ON AU.account_id = A.aid WHERE A.aid = {};".format(uid))
+  lists = []
+  for result in listcursor:
+      lists.append(result[0])
+  listcursor.close()
+
+
   #
   # Flask uses Jinja templates, which is an extension to HTML where you can
   # pass data to a template and dynamically generate HTML based on the data
@@ -168,6 +176,9 @@ def index():
   #     {% endfor %}
   #
   context = dict( data = names )
+  context['list_result'] = lists
+
+
 
 
   #

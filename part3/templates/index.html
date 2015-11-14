@@ -19,5 +19,18 @@
 
 </body>
 
+<body>
+  <h1>Lists for user</h1>
+  <ul class=lists>
+      <div>{{uid}}</div>
+      <div>{{list_result}}</div>
+ 
+      <div>
+        {% for n in list_result %}
+        <div>{{n}}</div>
+        {% endfor %}
+      </div> 
+  <ul>
+</body>
 
 </html>
