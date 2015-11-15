@@ -11,16 +11,16 @@
 -- INSERT INTO VALUES (10);
 
 -- account
-INSERT INTO account VALUES (1, 'nam.hoang@columbia.edu', 'Nam');
-INSERT INTO account VALUES (2, 'tz2278@columbia.edu', 'Tianci');
-INSERT INTO account VALUES (3, 'abhijit@columbia.edu', 'Abhijit');
-INSERT INTO account VALUES (4, 'ayush@columbia.edu', 'Ayush');
-INSERT INTO account VALUES (5, 'jincheng@columbia.edu', 'Jincheng');
-INSERT INTO account VALUES (6, 'mengquing@columbia.edu', 'Mengquing');
-INSERT INTO account VALUES (7, 'sania@columbia.edu', 'Sania');
-INSERT INTO account VALUES (8, 'eugene@columbia.edu', 'Eugene');
-INSERT INTO account VALUES (9, 'namhoang1909@gmail.com', 'Nam');
-INSERT INTO account VALUES (10, 'abc@gmail.com', 'Abc');
+INSERT INTO account VALUES (1, 'nam.hoang@columbia.edu', 'Nam', 'pbkdf2:sha1:1000$61hbbUsv$147ba928a96f06efd2ee4956db731ff1d744ae1b');
+INSERT INTO account VALUES (2, 'tz2278@columbia.edu', 'Tianci', 'pbkdf2:sha1:1000$nEiw4mPV$92db9908e76cda41d2fabf1c4f09a0eed6c233ee');
+INSERT INTO account VALUES (3, 'abhijit@columbia.edu', 'Abhijit', 'pbkdf2:sha1:1000$61hbbUsv$147ba928a96f06efd2ee4956db731ff1d744ae1b');
+INSERT INTO account VALUES (4, 'ayush@columbia.edu', 'Ayush', 'pbkdf2:sha1:1000$61hbbUsv$147ba928a96f06efd2ee4956db731ff1d744ae1b');
+INSERT INTO account VALUES (5, 'jincheng@columbia.edu', 'Jincheng', 'pbkdf2:sha1:1000$61hbbUsv$147ba928a96f06efd2ee4956db731ff1d744ae1b');
+INSERT INTO account VALUES (6, 'mengquing@columbia.edu', 'Mengquing', 'pbkdf2:sha1:1000$61hbbUsv$147ba928a96f06efd2ee4956db731ff1d744ae1b');
+INSERT INTO account VALUES (7, 'sania@columbia.edu', 'Sania', 'pbkdf2:sha1:1000$61hbbUsv$147ba928a96f06efd2ee4956db731ff1d744ae1b');
+INSERT INTO account VALUES (8, 'eugene@columbia.edu', 'Eugene', 'pbkdf2:sha1:1000$61hbbUsv$147ba928a96f06efd2ee4956db731ff1d744ae1b');
+INSERT INTO account VALUES (9, 'namhoang1909@gmail.com', 'Nam', 'pbkdf2:sha1:1000$61hbbUsv$147ba928a96f06efd2ee4956db731ff1d744ae1b');
+INSERT INTO account VALUES (10, 'abc@gmail.com', 'Abc', 'pbkdf2:sha1:1000$61hbbUsv$147ba928a96f06efd2ee4956db731ff1d744ae1b');
 
 -- list
 INSERT INTO list VALUES (1, 1, 'Work');
