@@ -109,4 +109,33 @@ FROM accessible_user AU INNER JOIN account A
 ON AU.account_id = A.aid
 WHERE AU.list_id = 1;
 
+-- get all the lists of user with aid 1
+Select L.name
+FROM accessible_user AU INNER JOIN list L
+ON AU.list_id = L.lid
+INNER JOIN account A
+ON AU.account_id = A.aid
+WHERE A.aid = 1;
+
+-- get task for list 1
+SELECT *
+FROM task T
+WHERE T.list_id = 1;
+
+-- get label for task 1
+SELECT label.name, label.color
+FROM label 
+WHERE label.list_id = 1;
+
+-- get checklist for task 1
+SELECT *
+FROM checklist C
+WHERE checklist.task_id = 1;
+
+-- get comments for list 1
+SELECT *
+FROM comments C
+WHERE C.list_id = 1;
+
+
 
