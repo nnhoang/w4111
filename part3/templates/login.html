@@ -18,11 +18,14 @@
     {% if messages %}
     <ul class="flashes">
       {% for m in messages %}
-        <li> {{ m }} </li>
+        <div class="alert alert-info" role="alert">{{ m }}</div>
       {% endfor %}
     </ul>
     {% endif %}
   {% endwith %}
+  {% if error %}
+    <div class="alert alert-danger" role="alert">{{ error }}</div>
+  {% endif %}
 
   <body>
     <ul class="nav nav-tabs">
@@ -30,9 +33,6 @@
       <li><a href="#signup" data-toggle="tab">Sign Up</a></li>
     </ul>
 
-    {% if error %}
-      <div class="alert alert-danger" role="alert">{{ error }}</div>
-    {% endif %}
 
     <div class="tab-content">
     <div id="login" class="tab-pane active in">
@@ -42,11 +42,11 @@
         <input name="email" type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
         <label for="inputPassword" class="sr-only">Password</label>
         <input name="password" type="password" id="inputPassword" class="form-control" placeholder="Password" required>
-        <div class="checkbox">
+<!--         <div class="checkbox">
           <label>
             <input type="checkbox" value="remember-me"> Remember me
           </label>
-        </div>
+        </div> -->
         <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
       </form>
     </div>

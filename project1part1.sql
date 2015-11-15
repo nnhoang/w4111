@@ -60,8 +60,8 @@ CREATE TABLE label (
 );
 
 CREATE TABLE label_task (
-  task_id int NOT NULL REFERENCES task(tid),
-  label_id int NOT NULL REFERENCES label(lid),
+  task_id int NOT NULL REFERENCES task(tid) ON DELETE CASCADE,
+  label_id int NOT NULL REFERENCES label(lid) ON DELETE CASCADE,
   UNIQUE (task_id, label_id)
 );
 
