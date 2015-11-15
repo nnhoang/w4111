@@ -20,13 +20,12 @@ eugene wu 2015
 import os
 from sqlalchemy import *
 from sqlalchemy.pool import NullPool
-from flask import Flask, request, render_template, g, redirect, Response, session, url_for
+from flask import Flask, request, render_template, g, redirect, Response, session, url_for, flash
 from werkzeug.security import generate_password_hash, check_password_hash
 
 tmpl_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
 app = Flask(__name__, template_folder=tmpl_dir)
 app.secret_key = 'IJ*TD B^&RT&D^F S&^FDFGDS&FG** *J*(J(DJSAD?'
-
 
 #
 # The following uses the sqlite3 database test.db -- you can use this for debugging purposes
@@ -145,7 +144,7 @@ def index():
     names.append(result['name'])  # can also be accessed using result[0]
   cursor.close()
 
-  uid = request.args["userid"];
+  uid = session['uid'] if 'uid' in session else None
   listcursor = g.conn.execute("Select L.name FROM accessible_user AU INNER JOIN list L ON AU.list_id = L.lid INNER JOIN account A ON AU.account_id = A.aid WHERE A.aid = {};".format(uid))
   lists = []
   for result in listcursor:
@@ -191,21 +190,41 @@ def index():
   #
   return render_template("index.html", **context)
 
+@app.route('/task/<operation>/<task_id>', methods=['GET', 'POST'])
+def task(operation, task_id):
+  if 'uid' in session:
+    uid = sesssion['uid']
+    if operation == 'create':
+      query = InsertQuery(task)
+      for key in ('due', 'description', 'name', 'assigned_to', 'last_editor', 'list_id'):
+        if key in request.form and request.form[key]:
+          query.add(key, request.form[key])
+
+      query.add('last_editor', uid)
+      query.execute()
+
+    if operation == 'delete':
+
+
+
+
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
   error = None
   if request.method == 'POST':
     user = g.conn.execute('SELECT * FROM account WHERE email = %s', request.form['email']).fetchone()
     if user and check_password_hash(user['password'], request.form['password']):
-      session['aid'] = user['aid']
+      session['uid'] = user['aid']
       print "success"
       return redirect(url_for('index'))
     else:
       error = 'Invalid email or password'
-  print error
+
   return render_template('login.html', error=error)
 
-@app.route('/signup', methods=['POST'])
+@app.route('/signup', methods=['GET', 'POST'])
 def signup():
   error = None
   if request.method == 'POST':
@@ -219,6 +238,11 @@ def signup():
 
   return render_template('login.html', error=error)
 
+@app.route('/logout')
+def logout():
+  if 'uid' in session:
+    session.pop('uid', None)
+  return redirect(url_for('index'))
 
 #
 # This is an example of a different path.  You can see it at
