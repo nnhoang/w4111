@@ -22,15 +22,86 @@
 <body>
   <h1>Lists for user</h1>
   <ul class=lists>
-      <div>{{uid}}</div>
-      <div>{{list_result}}</div>
- 
-      <div>
-        {% for n in list_result %}
-        <div>{{n}}</div>
+  <div>{{list_result}}</div>
+  
+  <div>
+    {% for n in list_result %}
+    <h2>List</h2>
+    <div>{{n.name}}</div>
+    <div>{{n.owner}}</div>
+
+<!--    
+      <body>
+          <ul class=tasks>
+          <div>{{n.task_all}}</div>
+
+          <div>
+            {% for a in n.task_all %}
+            <h3>Tasks</h3>
+            <div>{{a.name}}</div>
+            <div>{{a.due}}</div>
+            <div>{{a.description}}</div>
+            <div>{{a.assigned_to}}</div>
+            <div>{{a.last_editor}}</div>
+            {% if a.status %}
+                <div>{{a.when_completed}}</div>
+            {% endif %}
+                <body>
+                <div>
+                    {% for m in a.checklist %}
+                        <h4>CheckList</h4>
+                        <div>{{m.name}}</div>
+                        <div>{{m.status}}</div>
+                    {% endfor %}
+                </div>
+                </body>
+            {% endfor %}
+
+          </div>  
+          </ul>
+      </body>
+-->
+    <body>
+        <div>{{n.label}}</div>
+        {% for i in n.label %}
+        <h2>Lable</h2>
+        <div>{{i.name}}</div>
+        <div>{{i.color}}</div>
+
+          <div>
+            {% for a in i.task %}
+            <h3>Tasks</h3>
+            <div>{{a.name}}</div>
+            <div>{{a.due}}</div>
+            <div>{{a.description}}</div>
+            <div>{{a.assigned_to}}</div>
+            <div>{{a.last_editor}}</div>
+            {% if a.status %}
+                <div>{{a.when_completed}}</div>
+            {% endif %}
+                <body>
+                <div>
+                    {% for m in a.checklist %}
+                        <h4>CheckList</h4>
+                        <div>{{m.name}}</div>
+                        <div>{{m.status}}</div>
+                    {% endfor %}
+                </div>
+                </body>
+            {% endfor %}
+
+          </div>  
+
+
+
         {% endfor %}
-      </div> 
-  <ul>
+
+    </body>
+
+    {% endfor %}
+  </div>  
+  </ul>
 </body>
+
 
 </html>
