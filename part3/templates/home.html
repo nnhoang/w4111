@@ -33,7 +33,11 @@ CTYPE html>
                 </div>
                 <div id="navbar" class="navbar-collapse collapse">
                     <ul class="nav navbar-nav navbar-right">
+                        {% for n in list_resutl %}
+                        <li><a href="#">{{n.name}}</a></li>
+                        {% endfor %}
                         <li><a href="#">Help</a></li>
+
                     </ul>
                 </div>
             </div>    
@@ -42,16 +46,22 @@ CTYPE html>
         <div class="container-fliud">
             <div class="row">
                 <div class="col-sm-5 col-md-4 sidebar">
+                    <form>
+                        <div class="form-group">
+                            <label for="message">Message: </label>
+                            <textarea type="text" class="form-control" rows="3" placeholder="Add comments"></textarea>
 
-
-   
+                         </div>
+                         <button type="submit" class="btn btn-primary">Send</button>
+                    </form>
                 </div>
 
                 <div class="col-sm-7 col-sm-offset-5 col-md-8 col-md-offset-4 main">
-                
+                    
                     <h1 class="page-header">Dashboard</h1>
                     <div class="row">
                          {% for n in list_result %}
+
                          <h2>{{n.name}}</h2>
                          <p>{{n.owner}}</p>
                          {% block label %}{{n}}{% endblock %}
