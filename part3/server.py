@@ -338,6 +338,10 @@ def logout():
 def another():
   return render_template("anotherfile.html")
 
+@app.route('/home', methods=["POST", "GET"])
+def home():
+  return render_template("home.html")
+
 if __name__ == "__main__":
   import click
 

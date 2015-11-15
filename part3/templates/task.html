@@ -1,0 +1,22 @@
+{% extends "index.html" %}
+{% block label %}
+{% for i in n.label %}
+<h2>{{i.name}}</h2>
+<ul class=task>
+    {% for a in i.task %}
+    <h3>{{a.name}}</h3>
+    <p>{{a.description}}</p>
+    <p>{{a.due}} {{a.assigned_to}} {{a.last_editor}}</p>
+    {% if a.status %}
+        <p>{{a.when_completed}}</p>
+    {% endif %}
+        {% for m in a.checklist %}
+        <p>{{m.name}} {{m.status}}</p>
+        {% endfor %}
+
+    {% else %}
+    <li><em>No task yet. Enter more task</em>
+    {% end for %}
+</ul>
+{% endfor %}
+{% endblock %}
