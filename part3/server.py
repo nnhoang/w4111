@@ -17,6 +17,7 @@ Read about it online.
 eugene wu 2015
 """
 
+import datetime
 import os
 from sqlalchemy import *
 from sqlalchemy.pool import NullPool
@@ -187,7 +188,7 @@ def index():
   """
 
   # DEBUG: this is debugging code to see what request looks like
-  print request.args
+  # print request.args
 
 
   #
@@ -250,8 +251,9 @@ tables = {'task': ('due', 'description', 'name', 'assigned_to', 'list_id'),
           'list': ('name'),
           'label': ('name', 'color'),
           'checklist': ('name', 'task_id'),
-          'label_task': ('task_id', 'label_id')}
-@app.route('/create/<table>')
+          'label_task': ('task_id', 'label_id'),
+          'comment': ('content', 'list_id')}
+@app.route('/create/<table>', methods=['POST'])
 def create(table):
   if 'uid' in session and table in tables:
     uid = session['uid']
@@ -265,6 +267,9 @@ def create(table):
       query.add('last_editor', uid)
     elif table == 'list':
       query.add('owner', uid)
+    elif table == 'comment':
+      query.add('sender', uid)
+      query.add('since', datetime.datetime.now())
 
     query.execute()
     flash('{} created.'.format(table.capitalize()))
@@ -272,17 +277,19 @@ def create(table):
 
 # list of tables to be used for delete() and the correspondin primary keys
 primarykeys = {'task': 'tid', 'list': 'lid', 'label': 'lid', 'checklist': 'cid'}
-@app.route('/delete/<table>')
-def delete(table, row_id):
-  if 'uid' in session and table in tables and 'row_id' in request.form:
+@app.route('/delete/<table>', methods=['POST'])
+def delete(table):
+  # if 'uid' in session and table in tables and 'row_id' in request.form:
+  if True:
     uid = session['uid']
     query = InsertQuery(table)
-    row_id = request.form['row_id']
-    row_id2 = request.form['row_id2'] if 'row_id2' in request.form else None
+    print "delete", request.args
+    row_id = request.args['id']
+    row_id2 = request.args['id2'] if 'row_id2' in request.args else None
 
     # TODO check for user right
     if table in primarykeys:
-      g.conn.execute('DELETE FROM %s WHERE %s = %s', table, primarykeys[table], row_id)
+      g.conn.execute('DELETE FROM {} WHERE {} = %s'.format(table, primarykeys[table]), row_id)
     elif table == 'label_task' and row_id2:
       g.conn.execute('DELETE FROM %s WHERE task_id = %s AND label_id = %s',
                      table, row_id, row_id2)
