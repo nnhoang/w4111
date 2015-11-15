@@ -40,8 +40,8 @@ app.secret_key = 'IJ*TD B^&RT&D^F S&^FDFGDS&FG** *J*(J(DJSAD?'
 #
 #     DATABASEURI = "postgresql://ewu2493:foobar@w4111db1.cloudapp.net:5432/proj1part2"
 #
-# DATABASEURI = "postgresql://nnh2110:627@w4111db1.cloudapp.net/proj1part2"
-DATABASEURI = "postgresql://tz2278:242@w4111db1.cloudapp.net:5432/proj1part2"
+DATABASEURI = "postgresql://nnh2110:627@w4111db1.cloudapp.net/proj1part2"
+# DATABASEURI = "postgresql://tz2278:242@w4111db1.cloudapp.net:5432/proj1part2"
 
 
 #
@@ -143,6 +143,22 @@ def get_task_underlabel(label_id):
     task_cursor.close()
     return tasks
 
+class InsertQuery:
+  def __init__(self, table_name):
+    self.keys = []
+    self.ses = []
+    self.values = []
+    self.table_name = table_name
+
+  def add(self, attr, value):
+    self.keys.append(attr)
+    self.ses.append('%s')
+    self.values.append(value)
+
+  def execute(self):
+    query = 'INSERT INTO {} ({}) VALUES ({})'.format(
+        self.table_name, str(self.keys)[1:-1], str(self.ses)[1:-1])
+    g.conn.execute(query, values)
 
 
 #
@@ -229,24 +245,50 @@ def index():
   #
   return render_template("index.html", **context)
 
-@app.route('/task/<operation>/<task_id>', methods=['GET', 'POST'])
-def task(operation, task_id):
-  if 'uid' in session:
-    uid = sesssion['uid']
-    if operation == 'create':
-      query = InsertQuery(task)
-      for key in ('due', 'description', 'name', 'assigned_to', 'last_editor', 'list_id'):
-        if key in request.form and request.form[key]:
-          query.add(key, request.form[key])
+# list of table to be created for create() and the attributes that can get from request.form
+tables = {'task': ('due', 'description', 'name', 'assigned_to', 'list_id'),
+          'list': ('name'),
+          'label': ('name', 'color'),
+          'checklist': ('name', 'task_id'),
+          'label_task': ('task_id', 'label_id')}
+@app.route('/create/<table>')
+def create(table):
+  if 'uid' in session and table in tables:
+    uid = session['uid']
+    query = InsertQuery(table)
 
+    for key in tables[table]:
+      if key in request.form and request.form[key]:
+        query.add(key, request.form[key])
+
+    if table == 'task':
       query.add('last_editor', uid)
-      query.execute()
+    elif table == 'list':
+      query.add('owner', uid)
 
-    if operation == 'delete':
+    query.execute()
+    flash('{} created.'.format(table.capitalize()))
+  return reidrect(url_for('index'))
 
+# list of tables to be used for delete() and the correspondin primary keys
+primarykeys = {'task': 'tid', 'list': 'lid', 'label': 'lid', 'checklist': 'cid'}
+@app.route('/delete/<table>')
+def delete(table, row_id):
+  if 'uid' in session and table in tables and 'row_id' in request.form:
+    uid = session['uid']
+    query = InsertQuery(table)
+    row_id = request.form['row_id']
+    row_id2 = request.form['row_id2'] if 'row_id2' in request.form else None
 
+    # TODO check for user right
+    if table in primarykeys:
+      g.conn.execute('DELETE FROM %s WHERE %s = %s', table, primarykeys[table], row_id)
+    elif table == 'label_task' and row_id2:
+      g.conn.execute('DELETE FROM %s WHERE task_id = %s AND label_id = %s',
+                     table, row_id, row_id2)
 
-
+    flash('{} deleted.'.format(table.capitaliz()))
+  return redirect(url_for('index'))
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -256,7 +298,7 @@ def login():
     user = g.conn.execute('SELECT * FROM account WHERE email = %s', request.form['email']).fetchone()
     if user and check_password_hash(user['password'], request.form['password']):
       session['uid'] = user['aid']
-      print "success"
+      flash('Welcome, {}'.format(user.name))
       return redirect(url_for('index'))
     else:
       error = 'Invalid email or password'
