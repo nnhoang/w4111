@@ -143,6 +143,17 @@ def get_task_underlabel(label_id):
     task_cursor.close()
     return tasks
 
+def get_comments(lid):
+    cursor = g.conn.execute("SELECT * FROM comment C WHERE C.list_id = (%s) ORDER BY C.since DESC;", lid)
+    comments = []
+    for r in cursor:
+        comments.append(dict(cid=r[0], since=r[1], content=r[2], list_id=r[3], sender=get_username(r[4])))
+    cursor.close()
+    return comments
+
+
+
+
 class InsertQuery:
   def __init__(self, table_name):
     self.keys = []
@@ -203,7 +214,7 @@ def index():
   listcursor = g.conn.execute("Select L.lid, L.owner, L.name FROM accessible_user AU INNER JOIN list L ON AU.list_id = L.lid INNER JOIN account A ON AU.account_id = A.aid WHERE A.aid = (%s);", uid)
   lists = []
   for result in listcursor:
-      lists.append(dict(task_all=get_task(result[0]), label=get_labels(result[0]), owner=get_username(result[1]), name=result[2]))
+      lists.append(dict(task_all=get_task(result[0]),lid=result[0], label=get_labels(result[0]), owner=get_username(result[1]), name=result[2], comments=get_comments(result[0])))
   listcursor.close()
 
 
@@ -243,7 +254,7 @@ def index():
   # render_template looks in the templates/ folder for files.
   # for example, the below file reads template/index.html
   #
-  return render_template("index.html", **context)
+  return render_template("home.html", **context)
 
 # list of table to be created for create() and the attributes that can get from request.form
 tables = {'task': ('due', 'description', 'name', 'assigned_to', 'list_id'),

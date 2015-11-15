@@ -18,7 +18,7 @@ CTYPE html>
      <link href="/static/css/dashboard.css" rel="stylesheet">
 
    </head>
-
+   
    <body>
        <nav class="navbar navbar-inverse navbar-fixed-top">
            <div class="container-fluid">
@@ -33,19 +33,19 @@ CTYPE html>
                 </div>
                 <div id="navbar" class="navbar-collapse collapse">
                     <ul class="nav navbar-nav navbar-right">
-                        {% for n in list_resutl %}
-                        <li><a href="#">{{n.name}}</a></li>
+                        {% for n in list_result %}
+                        <li><a href="#{{n.lid}}">{{n.name}}</a></li>
                         {% endfor %}
-                        <li><a href="#">Help</a></li>
-
                     </ul>
                 </div>
             </div>    
         </nav> 
-
-        <div class="container-fliud">
+        
+        {% for n in list_result %}
+        <div id={{n.lid}} class="container-fliud">
             <div class="row">
                 <div class="col-sm-5 col-md-4 sidebar">
+                    <div class="row">
                     <form>
                         <div class="form-group">
                             <label for="message">Message: </label>
@@ -54,27 +54,28 @@ CTYPE html>
                          </div>
                          <button type="submit" class="btn btn-primary">Send</button>
                     </form>
+                    </div>
+                    <div>{{n.comments}}</div>
+                    <div class="row">                                                  
+                         {% for c in n.comments %}
+
+                         <li>{{c.content}}{{c.since}} by {{c.username}}</li>
+
+                         {% endfor %}
+                     </div>
                 </div>
 
                 <div class="col-sm-7 col-sm-offset-5 col-md-8 col-md-offset-4 main">
-                    
-                    <h1 class="page-header">Dashboard</h1>
-                    <div class="row">
-                         {% for n in list_result %}
-
-                         <h2>{{n.name}}</h2>
+                    <div class="row"> 
+                         <h2 class="page-header">{{n.name}}</h2>
                          <p>{{n.owner}}</p>
                          {% block label %}{{n}}{% endblock %}
-
-                         {% endfor %}
-
                     </div>    
 
                 </div>
             </div>
         </div>
-
-        
+        {% endfor %}  
    </body>
 </html>
 
