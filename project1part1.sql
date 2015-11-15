@@ -1,12 +1,13 @@
 CREATE TABLE account (
-  aid int PRIMARY KEY,
+  aid serial PRIMARY KEY,
   email text NOT NULL UNIQUE,
   name varchar(20) NOT NULL,
+  password text NOT NULL,
   CHECK (email LIKE '_%@_%._%')
 );
 
 CREATE TABLE list (
-  lid int PRIMARY KEY,
+  lid serial PRIMARY KEY,
   owner int NOT NULL REFERENCES account(aid),
   name varchar(100) NOT NULL
 );
@@ -19,7 +20,7 @@ CREATE TABLE accessible_user (
 );
 
 CREATE TABLE comment (
-  cid int PRIMARY KEY,
+  cid serial PRIMARY KEY,
   since timestamp NOT NULL,
   content varchar(1000) NOT NULL,
   list_id int NOT NULL REFERENCES list(lid) ON DELETE CASCADE,
@@ -28,7 +29,7 @@ CREATE TABLE comment (
 );
 
 CREATE TABLE task (
-  tid int PRIMARY KEY,
+  tid serial PRIMARY KEY,
   due timestamp,
   description text,
   name varchar(100) NOT NULL,
@@ -44,14 +45,14 @@ CREATE TABLE task (
 );
 
 CREATE TABLE checklist (
-  cid int PRIMARY KEY,
+  cid serial PRIMARY KEY,
   status boolean DEFAULT FALSE,
   name varchar(100) NOT NULL,
   task_id int NOT NULL REFERENCES task(tid) ON DELETE CASCADE
 );
 
 CREATE TABLE label (
-  lid int PRIMARY KEY,
+  lid serial PRIMARY KEY,
   name varchar(20),
   color varchar(10),
   CHECK (color IN ('blue', 'red', 'green', 'orange', 'white', 'black', 'yellow', 'purple')),
@@ -108,34 +109,5 @@ SELECT A.name
 FROM accessible_user AU INNER JOIN account A
 ON AU.account_id = A.aid
 WHERE AU.list_id = 1;
-
--- get all the lists of user with aid 1
-Select L.name
-FROM accessible_user AU INNER JOIN list L
-ON AU.list_id = L.lid
-INNER JOIN account A
-ON AU.account_id = A.aid
-WHERE A.aid = 1;
-
--- get task for list 1
-SELECT *
-FROM task T
-WHERE T.list_id = 1;
-
--- get label for task 1
-SELECT label.name, label.color
-FROM label 
-WHERE label.list_id = 1;
-
--- get checklist for task 1
-SELECT *
-FROM checklist C
-WHERE checklist.task_id = 1;
-
--- get comments for list 1
-SELECT *
-FROM comments C
-WHERE C.list_id = 1;
-
 
 
