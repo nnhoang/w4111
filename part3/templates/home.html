@@ -29,7 +29,7 @@
                        <span class="icon-bar"></span>
                        <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="#">Project name</a>
+                    <a class="navbar-brand" href="#">{{username}}</a>
                 </div>
                 <div id="navbar" class="navbar-collapse collapse">
                     <ul class="nav navbar-nav navbar-right">
@@ -41,10 +41,36 @@
             </div>    
         </nav> 
         
-        {% for n in list_result %}
-        <div id={{n.lid}} class="container-fliud">
+        <div class="container-fliud">
+            <div id=empty class="tabe-pane active in">
+            <form action="{{url_for('home')}}" method="post" class="form-lists">
             <div class="row">
-                <div class="col-sm-5 col-md-4 sidebar">
+                <div class="col-sm-5 col-md-4 sidebar"> 
+                    <div class="row">
+                    <form>
+                        <div class="form-group">
+                            <label for="message">Message: </label>
+                            <textarea type="text" class="form-control" rows="3" placeholder="Add comments" disabled></textarea>
+                         </div>
+                         <button type="submit" class="btn btn-primary">Send</button>
+                    </form>
+                    </div>
+                    <div class="row">                                                  
+                     </div>
+                </div>
+
+                <div class="col-sm-7 col-sm-offset-5 col-md-8 col-md-offset-4 main">
+   
+
+                </div>
+            </div>
+            </form>
+            </div>
+        {% for n in list_result %}
+            <div id={{n.lid}} class="tabe-pane fade">
+            <form action="{{url_for('home')}}" method="post" class="form-lists">
+            <div class="row">
+                <div class="col-sm-5 col-md-4 sidebar"> 
                     <div class="row">
                     <form>
                         <div class="form-group">
@@ -69,14 +95,17 @@
                     <div class="row"> 
                          <h2 class="page-header">{{n.name}}</h2>
                          <p>{{n.owner}}</p>
-                         {% block label %}{{n}}{% endblock %}
+                         {% set labels= n.label %}
+                         {% block label %}{{labels}}{% endblock %}
                     </div>    
 
                 </div>
             </div>
+            </form>
+            </div>
+        {% endfor %}
         </div>
 
-        {% endfor %}  
 
 
         
