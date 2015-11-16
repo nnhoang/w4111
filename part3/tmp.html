@@ -1,3 +1,20 @@
+<!-- create task -->
+<form action="/create/task" method="post">
+  <h2>Create a Task</h2>
+  <label for="input-name" class="sr-only">list_id</label>
+  <input name="list_id" value="ADD-VALUE!!!" type="hidden" id="input-name" class="form-control" required>
+  <label for="input-name" class="sr-only">Task Name</label>
+  <input name="name" type="text" id="input-name" class="form-control" placeholder="Task Name" required autofocus>
+  <label for="input-due" class="sr-only">Due</label>
+  <input name="due" type="datetime" id="input-due" class="form-control" placeholder="Due">
+  <label for="input-description" class="sr-only">Description</label>
+  <input name="description" type="text" id="input-description" class="form-control" placeholder="Description">
+  <label for="input-assigned_to" class="sr-only">Assign task to this email address</label>
+  <input name="assigned_to" type="text" id="input-assigned_to" class="form-control" placeholder="Assign task to this email address">
+  <button class="btn btn-lg btn-primary btn-block" type="submit">Create Task</button>
+</form>
+<!-- /create task -->
+
 <!-- create list -->
 <form action="/create/list" method="post">
   <h2>Create a List</h2>
@@ -7,11 +24,46 @@
 </form>
 <!-- /create list -->
 
+<!-- create label -->
+<form action="/create/label" method="post">
+  <h2>Create a Label</h2>
+
+  <label for="input-name" class="sr-only">Label Name</label>
+  <input name="name" type="text" id="input-name" class="form-control" placeholder="Label Name" required autofocus>
+  <label for="input-color" class="sr-only">Label Color</label>
+  <input name="color" type="text" id="input-color" class="form-control" placeholder="Choose color (blue, green, red)">
+
+  <button class="btn btn-lg btn-primary btn-block" type="submit">Create Label</button>
+</form>
+<!-- /create label -->
+
+<!-- create checklist -->
+<form action="/create/checklist" method="post">
+  <h2>Create a Checklist</h2>
+
+  <label for="input-taskid" class="sr-only">task_id</label>
+  <input name="task_id" value="ADD-VALUE!!!" type="hidden" id="input-taskid" class="form-control" required>
+  <label for="input-name" class="sr-only">Checklist Name</label>
+  <input name="name" type="text" id="input-name" class="form-control" placeholder="Checklist Name" required autofocus>
+
+  <button class="btn btn-lg btn-primary btn-block" type="submit">Create Checklist</button>
+</form>
+<!-- /create checklist -->
+
+<!-- create comment -->
+<form action="/create/comment" method="post">
+  <input name="listid" value="ADD-VALUE!!!" type="hidden" id="input-listid" class="form-control" required>
+  <input name="content" type="text" id="input-content" class="form-control" placeholder="Write your comment" required autofocus>
+
+  <button class="btn btn-lg btn-primary btn-block" type="submit">Create Checklist</button>
+</form>
+<!-- /create comment -->
+
 <!-- share to users -->
 <form action="/create/accessible_user" method="post">
   <h2>Sharing is Caring</h2>
-  <label for="input-name" class="sr-only">List Name</label>
-  <input name="list_id" value="ADD-VALUE!!!" type="hidden" id="input-name" class="form-control" placeholder="List Name" required>
+  <label for="input-name" class="sr-only">list_id</label>
+  <input name="list_id" value="ADD-VALUE!!!" type="hidden" id="input-name" class="form-control" required>
   <input name="email" type="email" id="input-email" class="form-control" placeholder="Share to Email Address: " required>
   <input type="radio" name="type" value="true" checked>Can edit
   <input type="radio" name="type" value="false">View only
