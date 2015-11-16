@@ -50,7 +50,7 @@
             <div id=empty class="tabe-pane active in">
                 <div class="row">
                 <div class="col-sm-5 col-md-4 sidebar"> 
-                    <ul class="nav nav-sidebar">
+                    <div class="row">
 
 
   <br/><div class="alert alert-info" role="alert">ALERT</div>
@@ -67,7 +67,7 @@
     <div class="alert alert-danger" role="alert">{{ error }}</div>
   {% endif %}
 
-                    </ul>    
+                    </div>    
                     <div class="row">
                     <form>
                         <div class="form-group">
@@ -89,8 +89,8 @@
             </div>
         {% for n in list_result %}
             <div id={{n.lid}} class="tabe-pane ative in">
-            <form action="{{url_for('home')}}" method="post" class="form-lists">
-            <div class="row">
+            
+                <div class="row">
                 <div class="col-sm-5 col-md-4 sidebar"> 
                     <div class="row">
                     <form>
@@ -138,6 +138,7 @@
                                  {% for m in a.checklist %}
                                  <li>{{m.name}} Status:{{m.status}}</li>
                                  {% endfor %}
+                                 </div>
                                  </div>
                              </div>
                              </div>
