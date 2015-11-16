@@ -17,7 +17,7 @@
      <!-- Custom styles for this template -->
      <link href="/static/css/dashboard.css" rel="stylesheet">
 
-   </head>
+  </head>
    
    <body>
        <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -30,9 +30,14 @@
                        <span class="icon-bar"></span>
                     </button>
                     <a class="navbar-brand" href="#">{{username}}</a>
+
+
+
                 </div>
                 <div id="navbar" class="navbar-collapse collapse">
                     <ul class="nav navbar-nav navbar-right">
+                        
+                        <li class="active"></li>
                         {% for n in list_result %}
                         <li><a href="#{{n.lid}}">{{n.name}}</a></li>
                         {% endfor %}
@@ -43,9 +48,26 @@
         
         <div class="container-fliud">
             <div id=empty class="tabe-pane active in">
-            <form action="{{url_for('home')}}" method="post" class="form-lists">
-            <div class="row">
+                <div class="row">
                 <div class="col-sm-5 col-md-4 sidebar"> 
+                    <ul class="nav nav-sidebar">
+
+
+  <br/><div class="alert alert-info" role="alert">ALERT</div>
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul class="flashes">
+      {% for m in messages %}
+      <div class="alert alert-info" role="alert">{{ m }}</div>
+      {% endfor %}
+    </ul>
+    {% endif %}
+  {% endwith %}
+  {% if error %}
+    <div class="alert alert-danger" role="alert">{{ error }}</div>
+  {% endif %}
+
+                    </ul>    
                     <div class="row">
                     <form>
                         <div class="form-group">
@@ -64,10 +86,9 @@
 
                 </div>
             </div>
-            </form>
             </div>
         {% for n in list_result %}
-            <div id={{n.lid}} class="tabe-pane fade">
+            <div id={{n.lid}} class="tabe-pane ative in">
             <form action="{{url_for('home')}}" method="post" class="form-lists">
             <div class="row">
                 <div class="col-sm-5 col-md-4 sidebar"> 
@@ -92,18 +113,51 @@
                 </div>
 
                 <div class="col-sm-7 col-sm-offset-5 col-md-8 col-md-offset-4 main">
-                    <div class="row"> 
-                         <h2 class="page-header">{{n.name}}</h2>
+                    <div class="row">
+                    <div class="col-sm-12 col-md-12"> 
+                        <h2>{{n.name}}<p>Owner:{{n.owner}}</p></h2>
                          <p>{{n.owner}}</p>
-                         {% set labels= n.label %}
-                         {% block label %}{{labels}}{% endblock %}
-                    </div>    
+                         {% for i in n.label %}
+                         <div class="row">
+                         <div class="col-sm-11 col-sm-offset-1 col-md-11 col-md-offset-1">
+                             <h3 tyle="color:{{i.color}}">{{i.name}}{{i.color}}</h3>
+                             <div cLass="row">
+                             <div class="col-sm-12 col-md-12">
+                             {% for a in i.task %}
+ 
+                                 <h4>{{a.name}}</h4>
+                                 <p>{{a.description}}</p>
+                                 {% if a.status %}
+                                     <p>Completed by {{a.when_complete}}</p>
+                                 {% else %}
+                                     <pre>Due Date: {{a.due}}  Assigned to: {{a.assigned_to}} Last Editor: {{a.last_editor}}</pre> 
+                                 {% endif %}
+                                 
+                                 <div class="row">
+                                 <div class="col-sm-12 col-md-12">
+                                 {% for m in a.checklist %}
+                                 <li>{{m.name}} Status:{{m.status}}</li>
+                                 {% endfor %}
+                                 </div>
+                             </div>
+                             </div>
+                             {% else %}
+                                 <li><em>No task yet. Enter more Task</em>
+                             {% endfor %}
+                          
+                         </div>
+                         </div>
+                         {% endfor %}    
+                     </div> 
+                     </div>   
 
                 </div>
             </div>
             </form>
             </div>
         {% endfor %}
+
+
         </div>
 
 

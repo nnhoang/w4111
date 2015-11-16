@@ -41,8 +41,8 @@ app.secret_key = 'IJ*TD B^&RT&D^F S&^FDFGDS&FG** *J*(J(DJSAD?'
 #
 #     DATABASEURI = "postgresql://ewu2493:foobar@w4111db1.cloudapp.net:5432/proj1part2"
 #
-DATABASEURI = "postgresql://nnh2110:627@w4111db1.cloudapp.net/proj1part2"
-# DATABASEURI = "postgresql://tz2278:242@w4111db1.cloudapp.net:5432/proj1part2"
+DATABASEURI = "postgresql://nnh2110:627@w4111db1.cloudapp.net:5432/proj1part2"
+#DATABASEURI = "postgresql://tz2278:242@w4111db1.cloudapp.net:5432/proj1part2"
 
 
 #
@@ -115,7 +115,7 @@ def get_checklist(taskid):
 def get_username(uid):
     if uid == None:
         return uid
-    cursor = g.conn.execute("SELECT A.name FROM account A WHERE A.aid = (%s)", uid)
+    cursor = g.conn.execute("SELECT A.name FROM account A WHERE A.aid = (%s);", uid)
     username = cursor.fetchone()[0]
     cursor.close()
     return username
@@ -129,7 +129,7 @@ def get_task(lid):
     return tasks
 
 def get_labels(lid):
-    label_cursor = g.conn.execute("SELECT * FROM label L WHERE L.list_id = (%s)", lid)
+    label_cursor = g.conn.execute("SELECT * FROM label L WHERE L.list_id = (%s);", lid)
     labels=[]
     for r in label_cursor:
         labels.append(dict(task=get_task_underlabel(r[0]),name=r[1],color=r[2]))
@@ -157,7 +157,6 @@ def check_accessible(list_id, aid):
     cursor.close()
     return accessible
 
-
 class InsertQuery:
   def __init__(self, table_name):
     self.keys = []
@@ -171,9 +170,10 @@ class InsertQuery:
     self.values.append(value)
 
   def execute(self):
-    query = 'INSERT INTO {} ({}) VALUES ({})'.format(
-        self.table_name, str(self.keys)[1:-1], str(self.ses)[1:-1])
-    g.conn.execute(query, values)
+    query = 'INSERT INTO {} ({}) VALUES ({});'.format(
+        self.table_name, ', '.join(self.keys), ', '.join(self.ses))
+    print 'EXECUTING QUERY',query
+    g.conn.execute(query, self.values)
 
 
 #
@@ -208,7 +208,7 @@ def index():
   #
   # example of a database query
   #
-  cursor = g.conn.execute("SELECT name FROM test")
+  cursor = g.conn.execute("SELECT name FROM test;")
   names = []
   for result in cursor:
     names.append(result['name'])  # can also be accessed using result[0]
@@ -269,39 +269,54 @@ def index():
 
 # list of table to be created for create() and the attributes that can get from request.form
 tables = {'task': ('due', 'description', 'name', 'assigned_to', 'list_id'),
-          'list': ('name'),
+          'list': ('name',),
           'label': ('name', 'color'),
           'checklist': ('name', 'task_id'),
           'label_task': ('task_id', 'label_id'),
-          'comment': ('content', 'list_id')}
+          'comment': ('content', 'list_id'),
+          'accessible_user': ('list_id', 'type')}
 @app.route('/create/<table>', methods=['POST'])
 def create(table):
   if 'uid' in session and table in tables:
     uid = session['uid']
     query = InsertQuery(table)
 
+    print 'possible attr', tables[table]
+    print 'request.form:', request.form
     for key in tables[table]:
       if key in request.form and request.form[key]:
         query.add(key, request.form[key])
 
     if table == 'task':
       query.add('last_editor', uid)
+
     elif table == 'list':
       query.add('owner', uid)
+
     elif table == 'comment':
       query.add('sender', uid)
       query.add('since', datetime.datetime.now())
 
+    elif table == 'accessible_user':
+      shared = g.conn.execute('SELECT * FROM account WHERE email = %s', request.form['email']).fetchone()
+      if shared and shared.aid != uid:
+        query.add('account_id', shared.aid)
+      else:
+        if not shared:
+          flash('Email has not been registered.')
+        else:
+          flash('You cannot add yourself.')
+        return redirect(url_for('home'))
+
     query.execute()
     flash('{} created.'.format(table.capitalize()))
-  return reidrect(url_for('index'))
+  return redirect(url_for('home'))
 
 # list of tables to be used for delete() and the correspondin primary keys
 primarykeys = {'task': 'tid', 'list': 'lid', 'label': 'lid', 'checklist': 'cid'}
 @app.route('/delete/<table>', methods=['POST'])
 def delete(table):
-  # if 'uid' in session and table in tables and 'row_id' in request.form:
-  if True:
+  if 'uid' in session and table in tables and 'id' in request.args:
     uid = session['uid']
     query = InsertQuery(table)
     print "delete", request.args
@@ -310,24 +325,24 @@ def delete(table):
 
     # TODO check for user right
     if table in primarykeys:
-      g.conn.execute('DELETE FROM {} WHERE {} = %s'.format(table, primarykeys[table]), row_id)
+      g.conn.execute('DELETE FROM {} WHERE {} = %s;'.format(table, primarykeys[table]), row_id)
     elif table == 'label_task' and row_id2:
-      g.conn.execute('DELETE FROM %s WHERE task_id = %s AND label_id = %s',
+      g.conn.execute('DELETE FROM %s WHERE task_id = %s AND label_id = %s;',
                      table, row_id, row_id2)
 
     flash('{} deleted.'.format(table.capitaliz()))
-  return redirect(url_for('index'))
+  return redirect(url_for('home'))
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
   error = None
   if request.method == 'POST':
-    user = g.conn.execute('SELECT * FROM account WHERE email = %s', request.form['email']).fetchone()
+    user = g.conn.execute('SELECT * FROM account WHERE email = %s;', request.form['email']).fetchone()
     if user and check_password_hash(user['password'], request.form['password']):
       session['uid'] = user['aid']
       flash('Welcome, {}'.format(user.name))
-      return redirect(url_for('index'))
+      return redirect(url_for('home'))
     else:
       error = 'Invalid email or password'
 
@@ -337,10 +352,10 @@ def login():
 def signup():
   error = None
   if request.method == 'POST':
-    user = g.conn.execute('SELECT * FROM account WHERE email = %s', request.form['email']).fetchone()
+    user = g.conn.execute('SELECT * FROM account WHERE email = %s;', request.form['email']).fetchone()
     if not user:
       password = generate_password_hash(request.form['password'])
-      g.conn.execute('INSERT INTO account(email, name, password) VALUES (%s, %s, %s)',
+      g.conn.execute('INSERT INTO account(email, name, password) VALUES (%s, %s, %s);',
                      request.form['email'], request.form['name'], password)
     else:
       error = 'User already exists. Please choose another email address!'
@@ -351,7 +366,7 @@ def signup():
 def logout():
   if 'uid' in session:
     session.pop('uid', None)
-  return redirect(url_for('index'))
+  return redirect(url_for('home'))
 
 
 #

@@ -1,0 +1,20 @@
+<!-- create list -->
+<form action="/create/list" method="post">
+  <h2>Create a List</h2>
+  <label for="input-name" class="sr-only">List Name</label>
+  <input name="name" type="text" id="input-name" class="form-control" placeholder="List Name" required autofocus>
+  <button class="btn btn-lg btn-primary btn-block" type="submit">Create List</button>
+</form>
+<!-- /create list -->
+
+<!-- share to users -->
+<form action="/create/accessible_user" method="post">
+  <h2>Sharing is Caring</h2>
+  <label for="input-name" class="sr-only">List Name</label>
+  <input name="list_id" value="ADD-VALUE!!!" type="hidden" id="input-name" class="form-control" placeholder="List Name" required>
+  <input name="email" type="email" id="input-email" class="form-control" placeholder="Share to Email Address: " required>
+  <input type="radio" name="type" value="true" checked>Can edit
+  <input type="radio" name="type" value="false">View only
+  <button class="btn btn-lg btn-primary btn-block" type="submit">Create List</button>
+</form>
+<!-- /share to users -->
