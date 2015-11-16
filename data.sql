@@ -12,7 +12,7 @@
 
 -- account
 INSERT INTO account VALUES (default, 'nam.hoang@columbia.edu', 'Nam', 'pbkdf2:sha1:1000$61hbbUsv$147ba928a96f06efd2ee4956db731ff1d744ae1b');
-INSERT INTO account VALUES (default, 'tz2278@columbia.edu', 'Tianci', 'pbkdf2:sha1:1000$nEiw4mPV$92db9908e76cda41d2fabf1c4f09a0eed6c233ee');
+INSERT INTO account VALUES (default, 'tz2278@columbia.edu', 'Tianci', 'pbkdf2:sha1:1000$61hbbUsv$147ba928a96f06efd2ee4956db731ff1d744ae1b');
 INSERT INTO account VALUES (default, 'abhijit@columbia.edu', 'Abhijit', 'pbkdf2:sha1:1000$61hbbUsv$147ba928a96f06efd2ee4956db731ff1d744ae1b');
 INSERT INTO account VALUES (default, 'ayush@columbia.edu', 'Ayush', 'pbkdf2:sha1:1000$61hbbUsv$147ba928a96f06efd2ee4956db731ff1d744ae1b');
 INSERT INTO account VALUES (default, 'jincheng@columbia.edu', 'Jincheng', 'pbkdf2:sha1:1000$61hbbUsv$147ba928a96f06efd2ee4956db731ff1d744ae1b');

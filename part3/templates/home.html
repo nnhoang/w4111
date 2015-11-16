@@ -96,12 +96,12 @@
     <script src="/static/js/jquery-2.1.4.min.js"></script>
     <script src="/static/js/bootstrap.min.js"></script>
     <script type="text/javascript">
-      // operation: 'create', 'delete'
+      // table: 'comment'
       // data: {list_id: '123'}
-      function post(operation, table, params) {
+      function delete(table, params) {
         console.log("here");
         var xhttp = new XMLHttpRequest();
-        var path = "/" + operation + "/" + table + "?";
+        var path = "/delete/" + table + "?";
         for (var key in params) {
           path = path + key + "=";
           path = path + params[key] + "&";
