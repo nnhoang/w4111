@@ -22,38 +22,50 @@
    <body>
        <nav class="navbar navbar-inverse navbar-fixed-top">
            <div class="container-fluid">
-               <div class="navbar-header">
+                <div class="navbar-header">
                    <button type="button" class="navbar-toggle cllapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
                        <span class="sr-only">Toggle navigation</span>
                        <span class="icon-bar"></span>
                        <span class="icon-bar"></span>
                        <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="#">{{username}}</a>
+                    <!-- <a class="navbar-brand" href="#">{{username}}</a> -->
 
-
-
+                    <div class="navbar-brand dropdown">
+                      <button class="btn btn-default dropdown-toggle" type="button" id="user-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        {{username}}
+                        <span class="caret"></span>
+                      </button>
+                      <ul class="dropdown-menu" aria-labelledby="user-menu">
+                        <li><a href="/logout">Logout</a></li>
+                      </ul>
+                    </div>
                 </div>
+
                 <div id="navbar" class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav navbar-right">
-                        
-                        <li class="active"></li>
+                    <ul class="nav navbar-nav navbar-right" role="tablist">
+                        <!-- <li class="active"></li> -->
                         {% for n in list_result %}
-                        <li><a href="#{{n.lid}}">{{n.name}}</a></li>
+                            {% if loop.index == 1%}
+                                <li class="active"><a href="#{{n.lid}}" data-toggle="tab">{{n.name}}</a></li>
+                            {% else %}
+                                <li><a href="#{{n.lid}}" data-toggle="tab">{{n.name}}</a></li>
+                            {% endif %}
                         {% endfor %}
                     </ul>
                 </div>
+
             </div>    
         </nav> 
         
-        <div class="container-fliud">
-            <div id=empty class="tabe-pane active in">
+<!--         <div class="container-fliud">
+            <div id=empty class="tab-pane active in">
                 <div class="row">
                 <div class="col-sm-5 col-md-4 sidebar"> 
                     <div class="row">
+ -->
 
-
-  <br/><div class="alert alert-info" role="alert">ALERT</div>
+<!--   <br/><div class="alert alert-info" role="alert">ALERT</div>
   {% with messages = get_flashed_messages() %}
     {% if messages %}
     <ul class="flashes">
@@ -66,8 +78,8 @@
   {% if error %}
     <div class="alert alert-danger" role="alert">{{ error }}</div>
   {% endif %}
-
-                    </div>    
+ -->
+<!--                     </div>    
                     <div class="row">
                     <form>
                         <div class="form-group">
@@ -82,32 +94,41 @@
                 </div>
 
                 <div class="col-sm-7 col-sm-offset-5 col-md-8 col-md-offset-4 main">
-   
-
                 </div>
             </div>
             </div>
+ -->
+        <!-- create list -->
+        <form style="width: 50%; float: right;" action="/create/list" method="post">
+          <h2>Create a List</h2>
+          <label for="input-name" class="sr-only">List Name</label>
+          <input name="name" type="text" id="input-name" class="form-control" placeholder="List Name" required autofocus>
+          <button class="btn btn-lg btn-primary btn-block" type="submit">Create List</button>
+        </form>
+        <!-- /create list -->
+        <div class="tab-content">
         {% for n in list_result %}
-            <div id={{n.lid}} class="tabe-pane ative in">
+            {% if loop.index == 1%}
+            <div id={{n.lid}} class="tab-pane active fade in">
+            {% else %}
+            <div id={{n.lid}} class="tab-pane fade">
+            {% endif %}
             
                 <div class="row">
-                <div class="col-sm-5 col-md-4 sidebar"> 
+                <div class="col-sm-5 col-md-4 sidebar">
                     <div class="row">
                     <form>
                         <div class="form-group">
                             <label for="message">Message: </label>
                             <textarea type="text" class="form-control" rows="3" placeholder="Add comments"></textarea>
-
-                         </div>
-                         <button type="submit" class="btn btn-primary">Send</button>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Send</button>
                     </form>
                     </div>
                     <div>{{n.comments}}</div>
                     <div class="row">                                                  
                          {% for c in n.comments %}
-
                          <li>{{c.content}}{{c.since}} by {{c.username}}</li>
-
                          {% endfor %}
                      </div>
                 </div>
@@ -116,49 +137,48 @@
                     <div class="row">
                     <div class="col-sm-12 col-md-12"> 
                         <h2>{{n.name}}<p>Owner:{{n.owner}}</p></h2>
-                         <p>{{n.owner}}</p>
-                         {% for i in n.label %}
-                         <div class="row">
-                         <div class="col-sm-11 col-sm-offset-1 col-md-11 col-md-offset-1">
-                             <h3 tyle="color:{{i.color}}">{{i.name}}{{i.color}}</h3>
-                             <div cLass="row">
-                             <div class="col-sm-12 col-md-12">
-                             {% for a in i.task %}
- 
-                                 <h4>{{a.name}}</h4>
-                                 <p>{{a.description}}</p>
-                                 {% if a.status %}
-                                     <p>Completed by {{a.when_complete}}</p>
-                                 {% else %}
-                                     <pre>Due Date: {{a.due}}  Assigned to: {{a.assigned_to}} Last Editor: {{a.last_editor}}</pre> 
-                                 {% endif %}
-                                 
-                                 <div class="row">
-                                 <div class="col-sm-12 col-md-12">
-                                 {% for m in a.checklist %}
-                                 <li>{{m.name}} Status:{{m.status}}</li>
-                                 {% endfor %}
-                                 </div>
-                                 </div>
-                             </div>
-                             </div>
-                             {% else %}
-                                 <li><em>No task yet. Enter more Task</em>
-                             {% endfor %}
-                          
-                         </div>
-                         </div>
-                         {% endfor %}    
-                     </div> 
-                     </div>   
+                        <p>{{n.owner}}</p>
+                        {% for i in n.label %}
+                        <div class="row">
+                        <div class="col-sm-11 col-sm-offset-1 col-md-11 col-md-offset-1">
+                            <h3 tyle="color:{{i.color}}">{{i.name}}{{i.color}}</h3>
+                            <div cLass="row">
+                            <div class="col-sm-12 col-md-12">
+                            {% for a in i.task %}
 
+                                <h4>{{a.name}}</h4>
+                                <p>{{a.description}}</p>
+
+                                {% if a.status %}
+                                <p>Completed by {{a.when_complete}}</p>
+                                {% else %}
+                                <pre>Due Date: {{a.due}}  Assigned to: {{a.assigned_to}} Last Editor: {{a.last_editor}}</pre> 
+                                {% endif %}
+                                
+                                <div class="row">
+                                <div class="col-sm-12 col-md-12">
+
+                                {% for m in a.checklist %}
+                                <li>{{m.name}} Status:{{m.status}}</li>
+                                {% endfor %}
+
+                                </div>
+                                </div>
+                            </div>
+                            </div>
+                            {% else %}
+                                <li><em>No task yet. Enter more Task</em>
+                            {% endfor %}
+                         
+                        </div>
+                        </div>
+                        {% endfor %}    
+                    </div> 
+                    </div>   
+                </div>
                 </div>
             </div>
-            </form>
-            </div>
         {% endfor %}
-
-
         </div>
 
 
