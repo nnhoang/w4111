@@ -153,7 +153,7 @@ def get_comments(lid):
     return comments
 def check_accessible(list_id, aid):
     cursor = g.conn.execute("SELECT AU.type FROM accessible_user AU WHERE AU.list_id=(%s) AND AU.account_id=(%s)", list_id, aid)
-    accessible = cursor        
+    accessible = cursor
     cursor.close()
     return accessible
 
@@ -170,10 +170,10 @@ class InsertQuery:
     self.values.append(value)
 
   def execute(self):
-    query = 'INSERT INTO {} ({}) VALUES ({});'.format(
+    query = 'INSERT INTO {} ({}) VALUES ({}) RETURNING *;'.format(
         self.table_name, ', '.join(self.keys), ', '.join(self.ses))
-    print 'EXECUTING QUERY',query
-    g.conn.execute(query, self.values)
+    print 'EXECUTING QUERY:', query, 'params:', self.values
+    return g.conn.execute(query, self.values).fetchone()
 
 
 #
@@ -223,10 +223,10 @@ def index():
       for result in listcursor:
           lists.append(dict(task_all=get_task(result[0]),lid=result[0], label=get_labels(result[0]), owner=get_username(result[1]), name=result[2], comments=get_comments(result[0])))
       listcursor.close()
-      
+
   labels = None
-  
-  
+
+
 
 
   #
@@ -306,11 +306,17 @@ def create(table):
           flash('Email has not been registered.')
         else:
           flash('You cannot add yourself.')
-        return redirect(url_for('home'))
+        return redirect(url_for('index'))
 
-    query.execute()
+    result = query.execute()
+
+    # add owner to accessible_list when user new list
+    if table == 'list':
+      g.conn.execute('INSERT INTO accessible_user VALUES (%s, %s, %s)',
+                     uid, result[0], 'true')
+
     flash('{} created.'.format(table.capitalize()))
-  return redirect(url_for('home'))
+  return redirect(url_for('index'))
 
 # list of tables to be used for delete() and the correspondin primary keys
 primarykeys = {'task': 'tid', 'list': 'lid', 'label': 'lid', 'checklist': 'cid'}
@@ -331,7 +337,7 @@ def delete(table):
                      table, row_id, row_id2)
 
     flash('{} deleted.'.format(table.capitaliz()))
-  return redirect(url_for('home'))
+  return redirect(url_for('index'))
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -342,7 +348,7 @@ def login():
     if user and check_password_hash(user['password'], request.form['password']):
       session['uid'] = user['aid']
       flash('Welcome, {}'.format(user.name))
-      return redirect(url_for('home'))
+      return redirect(url_for('index'))
     else:
       error = 'Invalid email or password'
 
@@ -366,7 +372,7 @@ def signup():
 def logout():
   if 'uid' in session:
     session.pop('uid', None)
-  return redirect(url_for('home'))
+  return redirect(url_for('index'))
 
 
 #
