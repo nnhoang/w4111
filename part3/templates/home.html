@@ -119,10 +119,11 @@
                 <div class="row">
                 <div class="col-sm-3 col-md-4 sidebar">
                     <div class="row">
-                    <form>
+                    <form action="/create/comment" method="post">
                         <div class="form-group">
-                            <label for="message">Message: </label>
-                            <textarea type="text" class="form-control" rows="3" placeholder="Add comments"></textarea>
+                            <input name="list_id" value="{{n.lid}}" type="hidden" id="input-listid" class="form-control" required>
+                            <label for="input-content">Message: </label>
+                            <textarea name="content" type="text" rows="3" id="input-content" class="form-control" placeholder="Write your comment" required></textarea>
                         </div>
                         <button type="submit" class="btn btn-primary">Send</button>
                     </form>
@@ -138,7 +139,7 @@
 
                 <div class="col-sm-9 col-sm-offset-3 col-md-8 col-md-offset-4 main">
                         <h2 style="text-align: center;">{{n.name}}</h2>
-                        <div style="height: 10px;">
+                        <div style="height: 15px;">
                             <p style="float: right;">Owner:{{n.owner}}</p>
                         </div>
                         {% for i in n.label %}
@@ -164,6 +165,16 @@
                             {% else %}
                                 <li><em>No task yet. Enter more Task</em>
                             {% endfor %}
+
+                            <form action="/create/task" method="post" style="margin-top: 30px;">
+                              <h4>New task</h4>
+                              <input name="list_id" value="{{n.lid}}" type="hidden" id="input-name" class="form-control" required>
+                              <input name="name" type="text" id="input-name" class="form-control" placeholder="Task Name" required autofocus>
+                              <input name="due" type="datetime" id="input-due" class="form-control" placeholder="Due">
+                              <input name="description" type="text" id="input-description" class="form-control" placeholder="Description">
+                              <input name="assigned_to" type="text" id="input-assigned_to" class="form-control" placeholder="Assign task to this email address">
+                              <button class="btn btn-lg btn-primary btn-block" type="submit">Create Task</button>
+                            </form>
                         </div>
                         {% endfor %}
                 </div>

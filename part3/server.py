@@ -269,7 +269,7 @@ def index():
   return render_template("home.html", labels = labels, username=username, **context)
 
 # list of table to be created for create() and the attributes that can get from request.form
-tables = {'task': ('due', 'description', 'name', 'assigned_to', 'list_id'),
+tables = {'task': ('due', 'description', 'name', 'list_id'),
           'list': ('name',),
           'label': ('name', 'color'),
           'checklist': ('name', 'task_id'),
@@ -290,6 +290,12 @@ def create(table):
 
     if table == 'task':
       query.add('last_editor', uid)
+      assigned_user = g.conn.execute('SELECT * FROM account WHERE email = %s', request.form['assigned_to']).fetchone()
+      if assigned_user:
+        query.add('assigned_to', assigned_user.aid)
+      else:
+        flash('Email has not been registered.')
+        return redirect(url_for('index'))
 
     elif table == 'list':
       query.add('owner', uid)
