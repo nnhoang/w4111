@@ -152,9 +152,13 @@
               <p style="float: right;">Owner:{{n.owner}}</p>
             </div>
             {% for i in n.label %}
+            
             <div class="label-region" style="margin: 10px 0;
                             background-color: aliceblue;
                             padding: 5px 20px 15px;">
+              {% if n.edit %}
+              <a><span title="Delete label" onclick="deletetable('label', {id: {{i.lid}}})" class="glyphicon glyphicon-remove" aria-hidden="true" style="margin-left: 15px;"></span></a>
+              {% endif %}
               <h3 style="color: {{i.color}}; text-align: center;">{{i.name}}</h3>
               {% for a in i.task %}
 
@@ -162,7 +166,9 @@
               <div id="task{{a.tid}}">
                 <p>
                   {{a.name}}
+                  {% if n.edit %}
                   <a><span title="Delete task" onclick="deletetable('task', {id: {{a.tid}}})" class="glyphicon glyphicon-remove" aria-hidden="true" style="margin-left: 15px;"></span></a>
+                  {% endif %}
                 </p>
                 <p>{{a.description}}</p>
 
@@ -173,17 +179,24 @@
                 {% endif %}
                 
                 {% for m in a.checklist %}
-                <li>{{m.name}} Status:{{m.status}}</li>
+                <p style="text-indent: 30px">
+                  {{m.name}} Status:{{m.status}}
+                  {% if n.edit %}
+                  <a><span title="Delete checklist" onclick="deletetable('checklist', {id: {{m.cid}}})" class="glyphicon glyphicon-remove" aria-hidden="true" style="margin-left: 15px;"></span></a>
+                  {% endif %}
+                </>
                 {% endfor %}
 
                 <!-- create checklist -->
+                {% if n.edit %}
                 <form action="/create/checklist" method="post">
-                  <div class="form-group">
-                    <input name="task_id" value="{{a.tid}}" type="hidden" id="input-taskid" class="form-control" required>
+                  <div class="form-group">        
+                      <input name="task_id" value="{{a.tid}}" type="hidden" id="input-taskid" class="form-control" required>
                     <input name="name" type="text" id="input-name" class="form-control" placeholder="Break it down!" required>
                     <button class="btn btn-primary" type="submit" style="display: none;">Create Checklist</button>
                   </div>
                 </form>
+                {% endif %}
                 <!-- /create checklist -->
 
               </div>
@@ -200,7 +213,6 @@
                 <input name="assigned_to" type="text" id="input-assigned_to" class="form-control" placeholder="Assign task to this email address">
                 <button class="btn btn-primary" type="submit">Create Task</button>
               </form>
-              {% else %}
               {% endif %}
               <!-- /create task -->
             </div>
@@ -217,7 +229,6 @@
                 </div>
                 <button class="btn btn-lg btn-primary btn-block" type="submit">Create Label</button>
            </form>
-           {% else %}
            {% endif %}
             <!-- /create label -->
         </div>
