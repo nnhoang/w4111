@@ -138,27 +138,26 @@
 
                 <div class="col-sm-7 col-sm-offset-5 col-md-8 col-md-offset-4 main">
                     <div class="row">
-                    <div class="col-sm-12 col-md-12"> 
-                        <h2>{{n.name}}<p>Owner:{{n.owner}}</p></h2>
-                        <p>{{n.owner}}</p>
+                    <div class="col-sm-12 col-md-12">
+                        <h2>{{n.name}}<font size=4> Owner: {{n.owner}}</font></h2>
                         {% for i in n.label %}
                         <div class="row">
-                        <div class="col-sm-11 col-sm-offset-1 col-md-11 col-md-offset-1">
-                            <h3 tyle="color:{{i.color}}">{{i.name}}{{i.color}}</h3>
+                        <div class="col-sm-12 col-md-12">
+                            <h3><font color="{{i.color}}">{{i.name}}</font></h3>
                             <div cLass="row">
-                            <div class="col-sm-12 col-md-12">
+                            <div class="col-sm-11 col-sm-offset-1 col-md-12 col-md-offset-1">
                             {% for a in i.task %}
 
                                 <h4>{{a.name}}</h4>
                                 <p>{{a.description}}</p>
 
                                 {% if a.status %}
-                                <p>Completed by {{a.when_complete}}</p>
+                                <pre>Completed by {{a.when_complete}}</pre>
                                 {% else %}
                                 <pre>Due Date: {{a.due}}  Assigned to: {{a.assigned_to}} Last Editor: {{a.last_editor}}</pre> 
                                 {% endif %}
                                 
-                                <div class="row">
+                                
                                 <div class="col-sm-12 col-md-12">
 
                                 {% for m in a.checklist %}
@@ -166,7 +165,7 @@
                                 {% endfor %}
 
                                 </div>
-                                </div>
+                               
                             </div>
                             </div>
                             {% else %}
@@ -176,7 +175,7 @@
                         </div>
                         </div>
                         {% endfor %}
-                        </br></br></br></br></br></br></br></br></br></br></br>    
+                           
                     </div> 
                     </div>   
                 </div>
