@@ -109,7 +109,7 @@
     </div>
     <!-- /create list -->
     <div class="tab-content">
-    {% for n in list_result %}
+      {% for n in list_result %}
       {% if loop.index == 1%}
       <div id={{n.lid}} class="tab-pane active fade in">
       {% else %}
@@ -123,9 +123,18 @@
             <div class="form-group">
               <input name="list_id" value="{{n.lid}}" type="hidden" id="input-listid" class="form-control" required>
               <label for="input-content">Message: </label>
+              {% if n.edit %}
               <textarea name="content" type="text" rows="3" id="input-content" class="form-control" placeholder="Write your comment" required></textarea>
+              {% else %}
+              <textarea name="content" type="text" rows="3" id="input-content" class="form-control" placeholder="Write your comment" required disabled></textarea>
+              {% endif %}
             </div>
+            {% if n.edit %}
             <button type="submit" class="btn btn-primary">Send</button>
+            {% else %}
+            <button type="submit" class="btn btn-primary" disabled>Send</button>
+            {% endif %}
+
           </form>
           </div>
            
@@ -181,6 +190,7 @@
               {% endfor %}
 
               <!-- create task -->
+              {% if n.edit %}
               <form action="/create/task" method="post" style="margin-top: 30px;">
                 <h4>New task</h4>
                 <input name="list_id" value="{{n.lid}}" type="hidden" id="input-name" class="form-control" required>
@@ -190,26 +200,32 @@
                 <input name="assigned_to" type="text" id="input-assigned_to" class="form-control" placeholder="Assign task to this email address">
                 <button class="btn btn-primary" type="submit">Create Task</button>
               </form>
+              {% else %}
+              {% endif %}
               <!-- /create task -->
             </div>
             {% endfor %}
 
             <!-- create label -->
+            {% if n.edit %}
             <form action="/create/label" method="post" style="margin-top: 40px; background-color: aliceblue; padding: 5px 20px 15px;">
               <div class="form-group">
                 <h2>New Label!!!</h2>
                 <input name="list_id" value="{{n.lid}}" type="hidden" id="input-name" class="form-control" required>
                 <input name="name" type="text" id="input-name" class="form-control" placeholder="Label Name" required>
                 <input name="color" type="text" id="input-color" class="form-control" placeholder="Choose color (blue, red, green, orange, white, black, yellow, purple)">
-              </div>
-              <button class="btn btn-lg btn-primary btn-block" type="submit">Create Label</button>
-            </form>
+                </div>
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Create Label</button>
+           </form>
+           {% else %}
+           {% endif %}
             <!-- /create label -->
         </div>
         </div>
       </div>
-    {% endfor %}
+      {% endfor %}
     </div>
+
 
 
 

@@ -152,9 +152,10 @@ def get_comments(lid):
     cursor.close()
     return comments
 
-def check_accessible(list_id, aid):
+def check_edit(list_id, aid):
     cursor = g.conn.execute("SELECT AU.type FROM accessible_user AU WHERE AU.list_id=(%s) AND AU.account_id=(%s)", list_id, aid)
-    accessible = cursor
+    for r in cursor:
+        accessible = r[0]
     cursor.close()
     return accessible
 
@@ -232,7 +233,7 @@ def index():
       username = get_username(uid)
       listcursor = g.conn.execute("Select L.lid, L.owner, L.name FROM accessible_user AU INNER JOIN list L ON AU.list_id = L.lid INNER JOIN account A ON AU.account_id = A.aid WHERE A.aid = (%s);", uid)
       for result in listcursor:
-          lists.append(dict(task_all=get_task(result[0]),lid=result[0], label=get_labels(result[0]), owner=get_username(result[1]), name=result[2], comments=get_comments(result[0])))
+          lists.append(dict(task_all=get_task(result[0]), lid=result[0], label=get_labels(result[0]), owner=get_username(result[1]), name=result[2], comments=get_comments(result[0]), edit=check_edit(result[0],uid)))
       listcursor.close()
 
   labels = None
