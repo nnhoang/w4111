@@ -147,7 +147,7 @@
         </div>
 
         <div class="col-sm-9 col-sm-offset-3 col-md-8 col-md-offset-4 main">
-            <h2 style="text-align: center;">{{n.name}}</h2>
+            <h2 style="text-align: center; text-transfrom: capitalize;">{{n.name}}</h2>
             <div style="height: 15px;">
               <p style="float: right;">Owner:{{n.owner}}</p>
             </div>
@@ -159,12 +159,14 @@
               {% if n.edit %}
               <a><span title="Delete label" onclick="deletetable('label', {id: {{i.lid}}})" class="glyphicon glyphicon-remove" aria-hidden="true" style="margin-left: 15px;"></span></a>
               {% endif %}
-              <h3 style="color: {{i.color}}; text-align: center;">{{i.name}}</h3>
+              <h3 style="color: {{i.color}}; text-align: center; text-transform: capitalize">{{i.name}}</h3>
               {% for a in i.task %}
               <div id="task{{a.tid}}">
-                <p>
+                <p style="text-transform: capitalize;">
                   {{a.name}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  Complete Precentage: &nbsp;{{a.completeness}}%
+                  {% if a.completeness != None %}
+                      Complete Precentage: &nbsp;{{a.completeness}}%
+                  {% endif %}
                   {% for taglabel in a.label %}
                   <span class="label label-{{taglabel.color}}" style="float:right; margin-left: 5px;">{{taglabel.name}}</span>
                   {% endfor %}
@@ -182,11 +184,18 @@
                 
                 {% for m in a.checklist %}
                 <p style="text-indent: 30px">
-                  {{m.name}} Status:{{m.status}}
-                  {% if n.edit %}
+                {% if n.edit %}
+                
+                  {% if m.status %}
+                    <input type="checkbox" checked>&nbsp;{{m.name}}
+                  {% else %}
+                    <input type="checkbox">&nbsp;{{m.name}}
+                  {% endif %}
+                
                   <a><span title="Delete checklist" onclick="deletetable('checklist', {id: {{m.cid}}})" class="glyphicon glyphicon-remove" aria-hidden="true" style="margin-left: 15px;"></span></a>
                   {% endif %}
-                </>
+                </p>
+
                 {% endfor %}
 
                 <!-- create checklist -->

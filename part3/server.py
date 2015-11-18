@@ -120,6 +120,8 @@ def task_status(taskid):
         count = count + 1
         if (row[0]):
                 complete = complete + 1
+    if (count == 0):
+        return None
     return int(float(complete)/float(count)) * 100
 
 
