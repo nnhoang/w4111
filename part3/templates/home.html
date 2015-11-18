@@ -115,7 +115,7 @@
             {% endif %}
             
                 <div class="row">
-                <div class="col-sm-5 col-md-4 sidebar">
+                <div class="col-sm-3 col-md-4 sidebar">
                     <div class="row">
                     <form>
                         <div class="form-group">
@@ -133,20 +133,21 @@
                      </div>
                 </div>
 
-                <div class="col-sm-7 col-sm-offset-5 col-md-8 col-md-offset-4 main">
+                <div class="col-sm-9 col-sm-offset-3 col-md-8 col-md-offset-4 main">
                     <div class="row">
                     <div class="col-sm-12 col-md-12"> 
-                        <h2>{{n.name}}<p>Owner:{{n.owner}}</p></h2>
-                        <p>{{n.owner}}</p>
+                        <h2 style="text-align: center;">{{n.name}}</h2>
+                        <div style="height: 10px;">
+                            <p style="float: right;">Owner:{{n.owner}}</p>
+                        </div>
                         {% for i in n.label %}
-                        <div class="row">
-                        <div class="col-sm-11 col-sm-offset-1 col-md-11 col-md-offset-1">
-                            <h3 tyle="color:{{i.color}}">{{i.name}}{{i.color}}</h3>
-                            <div cLass="row">
-                            <div class="col-sm-12 col-md-12">
+                        <div class="label-region" style="margin: 10px 0;
+                                                        background-color: aliceblue;
+                                                        padding: 5px 20px 15px;">
+                            <h3 style="color: {{i.color}}; text-align: center;">{{i.name}}</h3>
                             {% for a in i.task %}
 
-                                <h4>{{a.name}}</h4>
+                                <p>{{a.name}}</p>
                                 <p>{{a.description}}</p>
 
                                 {% if a.status %}
@@ -164,13 +165,9 @@
 
                                 </div>
                                 </div>
-                            </div>
-                            </div>
                             {% else %}
                                 <li><em>No task yet. Enter more Task</em>
                             {% endfor %}
-                         
-                        </div>
                         </div>
                         {% endfor %}    
                     </div> 
