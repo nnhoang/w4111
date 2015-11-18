@@ -112,6 +112,17 @@ def get_checklist(taskid):
     cursor.close()
     return checklist
 
+def task_status(taskid):
+    cursor = g.conn.execute("SELECT C.status FROM checklist C WHERE C.task_id = (%s);", taskid)
+    complete = 0
+    count = 0
+    for row in cursor:
+        count = count + 1
+        if (row[0]):
+                complete = complete + 1
+    return int(float(complete)/float(count)) * 100
+
+
 def get_username(uid):
     if uid == None:
         return uid
@@ -140,7 +151,7 @@ def get_task_underlabel(label_id):
     task_cursor = g.conn.execute("SELECT * From task T INNER JOIN label_task LT ON LT.task_id = T.tid WHERE LT.label_id=(%s);", label_id)
     tasks=[]
     for result in task_cursor:
-        tasks.append(dict(tid=result[0], label=get_label_for_task(result[0]), checklist=get_checklist(result[0]), due=result[1], description=result[2], name=result[3], assigned_to=get_username(result[4]), last_editor=get_username(result[5]), status=result[7], when_completed=result[8]))
+        tasks.append(dict(tid=result[0], label=get_label_for_task(result[0]), checklist=get_checklist(result[0]), completeness=task_status(result[0]), due=result[1], description=result[2], name=result[3], assigned_to=get_username(result[4]), last_editor=get_username(result[5]), status=result[7], when_completed=result[8]))
     task_cursor.close()
     return tasks
 

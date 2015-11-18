@@ -161,11 +161,13 @@
               {% endif %}
               <h3 style="color: {{i.color}}; text-align: center;">{{i.name}}</h3>
               {% for a in i.task %}
-
-              <div>{{a.label}}</div>
               <div id="task{{a.tid}}">
                 <p>
-                  {{a.name}}
+                  {{a.name}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  Complete Precentage: &nbsp;{{a.completeness}}%
+                  {% for taglabel in a.label %}
+                  <span class="label label-{{taglabel.color}}" style="float:right; margin-left: 5px;">{{taglabel.name}}</span>
+                  {% endfor %}
                   {% if n.edit %}
                   <a><span title="Delete task" onclick="deletetable('task', {id: {{a.tid}}})" class="glyphicon glyphicon-remove" aria-hidden="true" style="margin-left: 15px;"></span></a>
                   {% endif %}
