@@ -163,6 +163,21 @@
               {% for a in i.task %}
 
               <div>{{a.label}}</div>
+              <div class="dropdown" style="float: right">
+                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" id="addlabel{{a.tid}}" aria-haspopup="true" aria-expanded="true">
+                  Add label <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" araia-labelledby="addlabel{{a.tid}}">
+                  {% for label in n.label %}
+                    <!-- <li><a href onclick="$("#addlabel{{a.tid}}-{{label.lid}}").submit();">{{label.name}}</a></li> -->
+                    <form action="/create/label_task" method="post">
+                      <input name="task_id" value="{{a.tid}}" type="hidden">
+                      <input name="label_id" value="{{label.lid}}" type="hidden">
+                      <button type="submit">{{label.name}}</button>
+                    </form>
+                  {% endfor %}
+                </ul>
+              </div>
               <div id="task{{a.tid}}">
                 <p>
                   {{a.name}}
@@ -184,7 +199,7 @@
                   {% if n.edit %}
                   <a><span title="Delete checklist" onclick="deletetable('checklist', {id: {{m.cid}}})" class="glyphicon glyphicon-remove" aria-hidden="true" style="margin-left: 15px;"></span></a>
                   {% endif %}
-                </>
+                </p>
                 {% endfor %}
 
                 <!-- create checklist -->
@@ -206,6 +221,7 @@
               {% if n.edit %}
               <form action="/create/task" method="post" style="margin-top: 30px;">
                 <h4>New task</h4>
+                <input name="label_id" value="{{i.lid}}" type="hidden" class="form-control" required>
                 <input name="list_id" value="{{n.lid}}" type="hidden" id="input-name" class="form-control" required>
                 <input name="name" type="text" id="input-name" class="form-control" placeholder="Task Name" required>
                 <input name="due" type="datetime" id="input-due" class="form-control" placeholder="Due">
