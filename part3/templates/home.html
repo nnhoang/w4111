@@ -91,81 +91,7 @@
           </div>
           <div class="row">                                                  
            </div>
-        </div> -->
-
-        <!-- /create list -->
-        <div class="tab-content">
-        {% for n in list_result %}
-            {% if loop.index == 1%}
-            <div id={{n.lid}} class="tab-pane active fade in">
-            {% else %}
-            <div id={{n.lid}} class="tab-pane fade">
-            {% endif %}
-            
-                <div class="row">
-                <div class="col-sm-3 col-md-4 sidebar">
-                    <div class="row">
-                    <form action="/create/comment" method="post">
-                        <div class="form-group">
-                            <input name="list_id" value="{{n.lid}}" type="hidden" id="input-listid" class="form-control" required>
-                            <label for="input-content">Message: </label>
-                            <textarea name="content" type="text" rows="3" id="input-content" class="form-control" placeholder="Write your comment" required></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Send</button>
-                    </form>
-                    </div>
-                   
-                    <div class="row">                                                  
-                         {% for c in n.comments %}
-                         </br>
-                         <p>{{c.content}}</p>
-                         <p>{{c.since}} by {{c.sender}}</p>
-                         {% endfor %}
-                     </div>
-                </div>
-
-                <div class="col-sm-9 col-sm-offset-3 col-md-8 col-md-offset-4 main">
-                        <h2 style="text-align: center;">{{n.name}}</h2>
-                        <div style="height: 15px;">
-                            <p style="float: right;">Owner:{{n.owner}}</p>
-                        </div>
-                        {% for i in n.label %}
-                        <div class="label-region" style="margin: 10px 0;
-                                                        background-color: aliceblue;
-                                                        padding: 5px 20px 15px;">
-                            <h3 style="color: {{i.color}}; text-align: center;">{{i.name}}</h3>
-                            {% for a in i.task %}
-
-                                <U><p style="text-tansform: capitalized">{{a.name}}</p></U>
-                                <p>{{a.description}}</p>
-
-                                {% if a.status %}
-                                <pre>Completed by {{a.when_complete}}</pre>
-                                {% else %}
-                                <pre>Due Date: {{a.due}}  Assigned to: {{a.assigned_to}} Last Editor: {{a.last_editor}}</pre> 
-                                {% endif %}
-                                
-                                
-                                {% for m in a.checklist %}
-                                <li>{{m.name}} Status:{{m.status}}</li>
-                                {% endfor %}
-                            {% else %}
-                                <li><em>No task yet. Enter more Task</em>
-                            {% endfor %}
-
-                            <form action="/create/task" method="post" style="margin-top: 30px;">
-                              <h4>New task</h4>
-                              <input name="list_id" value="{{n.lid}}" type="hidden" id="input-name" class="form-control" required>
-                              <input name="name" type="text" id="input-name" class="form-control" placeholder="Task Name" required autofocus>
-                              <input name="due" type="datetime" id="input-due" class="form-control" placeholder="Due">
-                              <input name="description" type="text" id="input-description" class="form-control" placeholder="Description">
-                              <input name="assigned_to" type="text" id="input-assigned_to" class="form-control" placeholder="Assign task to this email address">
-                              <button class="btn btn-lg btn-primary btn-block" type="submit">Create Task</button>
-                            </form>
-                        </div>
-                        {% endfor %}
-                </div>
-                </div>
+        </div>
 
         <div class="col-sm-7 col-sm-offset-5 col-md-8 col-md-offset-4 main">
         </div>
@@ -198,7 +124,6 @@
               <input name="list_id" value="{{n.lid}}" type="hidden" id="input-listid" class="form-control" required>
               <label for="input-content">Message: </label>
               <textarea name="content" type="text" rows="3" id="input-content" class="form-control" placeholder="Write your comment" required></textarea>
-
             </div>
             <button type="submit" class="btn btn-primary">Send</button>
           </form>
@@ -224,7 +149,10 @@
               <h3 style="color: {{i.color}}; text-align: center;">{{i.name}}</h3>
               {% for a in i.task %}
 
-                <p>{{a.name}}</p>
+                <p>
+                  {{a.name}}
+                  <a><span title="Delete task" onclick="deletetable('task', {tid: '10'})" class="glyphicon glyphicon-remove" aria-hidden="true" style="margin-left: 15px;"></span></a>
+                </p>
                 <p>{{a.description}}</p>
 
                 {% if a.status %}
@@ -242,7 +170,7 @@
                   <div class="form-group">
                     <input name="task_id" value="{{a.tid}}" type="hidden" id="input-taskid" class="form-control" required>
                     <input name="name" type="text" id="input-name" class="form-control" placeholder="Break it down!" required>
-                    <button class="btn btn-primary" type="submit">Create Checklist</button>
+                    <button class="btn btn-primary" type="submit" style="display: none;">Create Checklist</button>
                   </div>
                 </form>
                 <!-- /create checklist -->
@@ -270,7 +198,7 @@
               <div class="form-group">
                 <h2>New Label!!!</h2>
                 <input name="name" type="text" id="input-name" class="form-control" placeholder="Label Name" required>
-                <input name="color" type="text" id="input-color" class="form-control" placeholder="Choose color (blue, green, red)">
+                <input name="color" type="text" id="input-color" class="form-control" placeholder="Choose color (blue, red, green, orange, white, black, yellow, purple)">
               </div>
               <button class="btn btn-lg btn-primary btn-block" type="submit">Create Label</button>
             </form>
@@ -287,19 +215,19 @@
   <script src="/static/js/jquery-2.1.4.min.js"></script>
   <script src="/static/js/bootstrap.min.js"></script>
   <script type="text/javascript">
-    // table: 'comment'
-    // data: {list_id: '123'}
-    function delete(table, params) {
-    console.log("here");
-    var xhttp = new XMLHttpRequest();
-    var path = "/delete/" + table + "?";
-    for (var key in params) {
-      path = path + key + "=";
-      path = path + params[key] + "&";
-    }
-    console.log(path);
-    xhttp.open("POST", path, true);
-    xhttp.send();
+    // table: comment
+    // data: {list_id: 123}
+    function deletetable(table, params) {
+      console.log("here");
+      var xhttp = new XMLHttpRequest();
+      var path = "/delete/" + table + "?";
+      for (var key in params) {
+        path = path + key + "=";
+        path = path + params[key] + "&";
+      }
+      console.log(path);
+      xhttp.open("POST", path, true);
+      xhttp.send();
     }
   </script>
 
