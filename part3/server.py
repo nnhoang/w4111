@@ -168,6 +168,12 @@ def check_edit(list_id, aid):
     for r in cursor:
         accessible = r[0]
     cursor.close()
+    ownerid = None
+    cursor = g.conn.execute("SELECT L.owner FROM list L WHERE L.lid=(%s)", list_id)
+    for r in cursor:
+        ownerid = r[0]
+    if (ownerid == aid) :
+        accessible = true
     return accessible
 
 
