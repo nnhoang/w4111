@@ -281,7 +281,7 @@ def index():
 # list of table to be created for create() and the attributes that can get from request.form
 tables = {'task': ('due', 'description', 'name', 'list_id'),
           'list': ('name',),
-          'label': ('name', 'color'),
+          'label': ('name', 'color', 'list_id'),
           'checklist': ('name', 'task_id'),
           'label_task': ('task_id', 'label_id'),
           'comment': ('content', 'list_id'),
@@ -342,7 +342,7 @@ def delete(table):
   if 'uid' in session and table in tables and 'id' in request.args:
     uid = session['uid']
     query = InsertQuery(table)
-    print "delete", request.args
+    print "DELETING:", request.args
     row_id = request.args['id']
     row_id2 = request.args['id2'] if 'row_id2' in request.args else None
 
@@ -353,8 +353,9 @@ def delete(table):
       g.conn.execute('DELETE FROM %s WHERE task_id = %s AND label_id = %s;',
                      table, row_id, row_id2)
 
-    flash('{} deleted.'.format(table.capitaliz()))
-  return redirect(url_for('index'))
+    flash('{} deleted.'.format(table.capitalize()))
+    return 'done'
+  return 'error'
 
 
 @app.route('/login', methods=['GET', 'POST'])

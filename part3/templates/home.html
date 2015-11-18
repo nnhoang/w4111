@@ -148,10 +148,12 @@
                             padding: 5px 20px 15px;">
               <h3 style="color: {{i.color}}; text-align: center;">{{i.name}}</h3>
               {% for a in i.task %}
-                <div>{{a.label}}</div>
+
+              <div>{{a.label}}</div>
+              <div id="task{{a.tid}}">
                 <p>
                   {{a.name}}
-                  <a><span title="Delete task" onclick="deletetable('task', {tid: '10'})" class="glyphicon glyphicon-remove" aria-hidden="true" style="margin-left: 15px;"></span></a>
+                  <a><span title="Delete task" onclick="deletetable('task', {id: {{a.tid}}})" class="glyphicon glyphicon-remove" aria-hidden="true" style="margin-left: 15px;"></span></a>
                 </p>
                 <p>{{a.description}}</p>
 
@@ -175,8 +177,7 @@
                 </form>
                 <!-- /create checklist -->
 
-              {% else %}
-                <li><em>No task yet. Enter more Task</em>
+              </div>
               {% endfor %}
 
               <!-- create task -->
@@ -197,6 +198,7 @@
             <form action="/create/label" method="post" style="margin-top: 40px; background-color: aliceblue; padding: 5px 20px 15px;">
               <div class="form-group">
                 <h2>New Label!!!</h2>
+                <input name="list_id" value="{{n.lid}}" type="hidden" id="input-name" class="form-control" required>
                 <input name="name" type="text" id="input-name" class="form-control" placeholder="Label Name" required>
                 <input name="color" type="text" id="input-color" class="form-control" placeholder="Choose color (blue, red, green, orange, white, black, yellow, purple)">
               </div>
@@ -216,9 +218,8 @@
   <script src="/static/js/bootstrap.min.js"></script>
   <script type="text/javascript">
     // table: comment
-    // data: {list_id: 123}
+    // data: {id: 123}
     function deletetable(table, params) {
-      console.log("here");
       var xhttp = new XMLHttpRequest();
       var path = "/delete/" + table + "?";
       for (var key in params) {
@@ -226,8 +227,17 @@
         path = path + params[key] + "&";
       }
       console.log(path);
-      xhttp.open("POST", path, true);
-      xhttp.send();
+      // xhttp.open("POST", path, true);
+      // xhttp.send();
+      jQuery.ajax({
+        type: "post",
+        url: path,
+        success: function(data) {
+          if (data == 'done') {
+            $('#' + table + params['id']).hide();
+          }
+        }
+      })
     }
   </script>
 
