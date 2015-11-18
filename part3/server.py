@@ -124,7 +124,7 @@ def get_task(lid):
     task_cursor = g.conn.execute("SELECT * FROM task T WHERE T.list_id = (%s);", lid)
     tasks=[]
     for result in task_cursor:
-        tasks.append(dict(tid=result[0], checklist=get_checklist(result[0]),due=result[1],description=result[2], name=result[3], assigned_to=get_username(result[4]), last_editor=get_username(result[5]), status=result[7], when_completed=result[8]))
+        tasks.append(dict(tid=result[0], label=get_label_for_task(result[0]), checklist=get_checklist(result[0]),due=result[1],description=result[2], name=result[3], assigned_to=get_username(result[4]), last_editor=get_username(result[5]), status=result[7], when_completed=result[8]))
     task_cursor.close()
     return tasks
 
@@ -157,6 +157,16 @@ def check_accessible(list_id, aid):
     accessible = cursor
     cursor.close()
     return accessible
+
+
+def get_label_for_task(task_id):
+    cursor = g.conn.execute("SELECT L.lid, L.name, L.color from label_task LT INNER JOIN label L on LT.label_id = L.lid where LT.task_id = (%s)", task_id)
+    labels = []
+    for r in cursor:
+        labels.append(dict(lid=r[0], name=r[1], color=r[2]))
+    cursor.close()
+    return labels
+
 
 class InsertQuery:
   def __init__(self, table_name):
