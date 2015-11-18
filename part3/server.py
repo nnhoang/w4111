@@ -108,7 +108,7 @@ def teardown_request(exception):
 
 def get_checklist(taskid):
     cursor = g.conn.execute("SELECT * FROM checklist C WHERE C.task_id = (%s);", taskid)
-    checklist = [dict(status=row[1], name=row[2]) for row in cursor.fetchall()]
+    checklist = [dict(cid=row[0], status=row[1], name=row[2]) for row in cursor.fetchall()]
     cursor.close()
     return checklist
 
@@ -124,7 +124,7 @@ def get_task(lid):
     task_cursor = g.conn.execute("SELECT * FROM task T WHERE T.list_id = (%s);", lid)
     tasks=[]
     for result in task_cursor:
-        tasks.append(dict(checklist=get_checklist(result[0]),due=result[1],description=result[2], name=result[3], assigned_to=get_username(result[4]), last_editor=get_username(result[5]), status=result[7], when_completed=result[8]))
+        tasks.append(dict(tid=result[0], checklist=get_checklist(result[0]),due=result[1],description=result[2], name=result[3], assigned_to=get_username(result[4]), last_editor=get_username(result[5]), status=result[7], when_completed=result[8]))
     task_cursor.close()
     return tasks
 
@@ -132,7 +132,7 @@ def get_labels(lid):
     label_cursor = g.conn.execute("SELECT * FROM label L WHERE L.list_id = (%s);", lid)
     labels=[]
     for r in label_cursor:
-        labels.append(dict(task=get_task_underlabel(r[0]),name=r[1],color=r[2]))
+        labels.append(dict(lid=r[0], task=get_task_underlabel(r[0]),name=r[1],color=r[2]))
     label_cursor.close()
     return labels
 
@@ -140,7 +140,7 @@ def get_task_underlabel(label_id):
     task_cursor = g.conn.execute("SELECT * FROM task T WHERE T.list_id = (%s);", label_id)
     tasks=[]
     for result in task_cursor:
-        tasks.append(dict(checklist=get_checklist(result[0]),due=result[1],description=result[2], name=result[3], assigned_to=get_username(result[4]), last_editor=get_username(result[5]), status=result[7], when_completed=result[8]))
+        tasks.append(dict(tid=result[0], checklist=get_checklist(result[0]),due=result[1],description=result[2], name=result[3], assigned_to=get_username(result[4]), last_editor=get_username(result[5]), status=result[7], when_completed=result[8]))
     task_cursor.close()
     return tasks
 
