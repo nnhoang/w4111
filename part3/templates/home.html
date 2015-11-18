@@ -99,12 +99,14 @@
             </div>
  -->
         <!-- create list -->
+        <div class="col-sm-11 col-md-11 main">
         <form style="width: 50%; float: right;" action="/create/list" method="post">
           <h2>Create a List</h2>
           <label for="input-name" class="sr-only">List Name</label>
           <input name="name" type="text" id="input-name" class="form-control" placeholder="List Name" required autofocus>
           <button class="btn btn-lg btn-primary btn-block" type="submit">Create List</button>
         </form>
+        </div>
         <!-- /create list -->
         <div class="tab-content">
         {% for n in list_result %}
@@ -125,10 +127,11 @@
                         <button type="submit" class="btn btn-primary">Send</button>
                     </form>
                     </div>
-                    <div>{{n.comments}}</div>
+                   
                     <div class="row">                                                  
                          {% for c in n.comments %}
-                         <li>{{c.content}}{{c.since}} by {{c.username}}</li>
+                         </br>
+                         <pre>{{c.content}} {{c.since}} by {{c.username}}</pre>
                          {% endfor %}
                      </div>
                 </div>
@@ -172,7 +175,8 @@
                          
                         </div>
                         </div>
-                        {% endfor %}    
+                        {% endfor %}
+                        </br></br></br></br></br></br></br></br></br></br></br>    
                     </div> 
                     </div>   
                 </div>
