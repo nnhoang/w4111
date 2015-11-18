@@ -151,6 +151,19 @@
             <div style="height: 15px;">
               <p style="float: right;">Owner:{{n.owner}}</p>
             </div>
+
+            <!-- share to users -->
+            {% if n.edit %}
+            <form action="/create/accessible_user" method="post" style="margin-bottom: 40px;">
+              <input name="list_id" value="{{n.lid}}" type="hidden" id="input-name" class="form-control" required>
+              <input name="email" type="email" id="input-email" class="form-control" placeholder="Sharing is Caring (please put email address)" required>
+              <input type="radio" name="type" value="true" checked>Can edit
+              <input type="radio" name="type" value="false">View only
+              <button class="btn btn-primary" type="submit" style="/*display: none;*/ float: right;">Share</button>
+            </form>
+            {% endif %}
+            <!-- /share to users -->
+
             {% for i in n.label %}
             
             <div class="label-region" style="margin: 10px 0;
@@ -162,23 +175,28 @@
               <h3 style="color: {{i.color}}; text-align: center; text-transform: capitalize">{{i.name}}</h3>
               {% for a in i.task %}
 
-              
+
+              {% if n.edit %}
+
               <div class="dropdown" style="float: right">
                 <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" id="addlabel{{a.tid}}" aria-haspopup="true" aria-expanded="true">
                   Add label <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" araia-labelledby="addlabel{{a.tid}}">
                   {% for label in n.label %}
-                    <!-- <li><a href onclick="$("#addlabel{{a.tid}}-{{label.lid}}").submit();">{{label.name}}</a></li> -->
+                    <li><a href="javascript:;" onclick="console.log(parentNode.nextSibling.nextSibling); parentNode.nextSibling.nextSibling.submit();">{{label.name}}</a></li>
                     <form action="/create/label_task" method="post">
                       <input name="task_id" value="{{a.tid}}" type="hidden">
                       <input name="label_id" value="{{label.lid}}" type="hidden">
-                      <button type="submit">{{label.name}}</button>
+                      <!-- <button type="submit" style="">{{label.name}}</button> -->
                     </form>
                   {% endfor %}
                 </ul>
               </div>
-              
+
+              {% endif %}
+
+
               <div id="task{{a.tid}}">
                 <p style="text-transform: capitalize;">
                 <b>{{a.name}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>

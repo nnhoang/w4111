@@ -120,9 +120,7 @@ def task_status(taskid):
         count = count + 1
         if (row[0]):
                 complete = complete + 1
-    if (count == 0):
-        return None
-    return int(float(complete)/float(count)) * 100
+    return int(float(complete)/float(count)) * 100 if count else 0
 
 
 def get_username(uid):
@@ -233,6 +231,10 @@ def index():
   #
   # example of a database query
   #
+  if 'uid' not in session or not session['uid']:
+    return redirect(url_for('login'))
+
+
   cursor = g.conn.execute("SELECT name FROM test;")
   names = []
   for result in cursor:
@@ -407,7 +409,7 @@ def signup():
 def logout():
   if 'uid' in session:
     session.pop('uid', None)
-  return redirect(url_for('index'))
+  return redirect(url_for('login'))
 
 
 #
