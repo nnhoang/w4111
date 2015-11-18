@@ -314,12 +314,13 @@ def create(table):
 
     if table == 'task':
       query.add('last_editor', uid)
-      assigned_user = g.conn.execute('SELECT * FROM account WHERE email = %s', request.form['assigned_to']).fetchone()
-      if assigned_user:
-        query.add('assigned_to', assigned_user.aid)
-      else:
-        flash('Email has not been registered.')
-        return redirect(url_for('index'))
+      if request.form['assigned_to']:
+        assigned_user = g.conn.execute('SELECT * FROM account WHERE email = %s', request.form['assigned_to']).fetchone()
+        if assigned_user:
+          query.add('assigned_to', assigned_user.aid)
+        else:
+          flash('Email has not been registered.')
+          return redirect(url_for('index'))
 
     elif table == 'list':
       query.add('owner', uid)
@@ -345,6 +346,8 @@ def create(table):
     if table == 'list':
       g.conn.execute('INSERT INTO accessible_user VALUES (%s, %s, %s)',
                      uid, result[0], 'true')
+    elif table == 'task':
+      g.conn.execute('INSERT INTO label_task VALUES (%s, %s)', result[0], request.form['label_id'])
 
     flash('{} created.'.format(table.capitalize()))
   return redirect(url_for('index'))
