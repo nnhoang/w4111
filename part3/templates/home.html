@@ -157,12 +157,12 @@
                             background-color: aliceblue;
                             padding: 5px 20px 15px;">
               {% if n.edit %}
-              <a><span title="Delete label" onclick="deletetable('label', {id: {{i.lid}}})" class="glyphicon glyphicon-remove" aria-hidden="true" style="margin-left: 15px;"></span></a>
+              <a><span title="Delete label" onclick="deletetable('label', {id: {{i.lid}}})" class="glyphicon glyphicon-remove" aria-hidden="true" style="float: right; margin-right: 2px;"></span></a>
               {% endif %}
               <h3 style="color: {{i.color}}; text-align: center; text-transform: capitalize">{{i.name}}</h3>
               {% for a in i.task %}
 
-              <div>{{a.label}}</div>
+              
               <div class="dropdown" style="float: right">
                 <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" id="addlabel{{a.tid}}" aria-haspopup="true" aria-expanded="true">
                   Add label <span class="caret"></span>
@@ -178,26 +178,22 @@
                   {% endfor %}
                 </ul>
               </div>
+              
               <div id="task{{a.tid}}">
                 <p style="text-transform: capitalize;">
-                  {{a.name}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <b>{{a.name}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
                   {% if a.completeness != None %}
                       Complete Precentage: &nbsp;{{a.completeness}}%
                   {% endif %}
                   {% for taglabel in a.label %}
-                  <span class="label label-{{taglabel.color}}" style="float:right; margin-left: 5px;">{{taglabel.name}}</span>
+                  <span class="label label-{{taglabel.color}}" style="float:right; margin-right: 5px;">{{taglabel.name}}</span>
                   {% endfor %}
                   {% if n.edit %}
                   <a><span title="Delete task" onclick="deletetable('task', {id: {{a.tid}}})" class="glyphicon glyphicon-remove" aria-hidden="true" style="margin-left: 15px;"></span></a>
                   {% endif %}
                 </p>
-                <p>{{a.description}}</p>
+                <p>Description: {{a.description}}</p>
 
-                {% if a.status %}
-                <pre>Completed by {{a.when_completed}}</pre>
-                {% else %}
-                <pre>Due Date: {{a.due}}  Assigned to: {{a.assigned_to}} Last Editor: {{a.last_editor}}</pre> 
-                {% endif %}
                 
                 {% for m in a.checklist %}
                 <p style="text-indent: 30px">
@@ -213,6 +209,12 @@
                   {% endif %}
                 </p>
                 {% endfor %}
+
+                {% if a.status %}
+                <pre>Completed by {{a.when_completed}}</pre>
+                {% else %}
+                <pre>Due Date: {{a.due}}  Assigned to: {{a.assigned_to}} Last Editor: {{a.last_editor}}</pre> 
+                {% endif %}
 
                 <!-- create checklist -->
                 {% if n.edit %}
