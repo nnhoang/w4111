@@ -120,7 +120,7 @@ def task_status(taskid):
         count = count + 1
         if (row[0]):
                 complete = complete + 1
-    return int(float(complete)/float(count)) * 100 if count else 0
+    return int(float(complete)/float(count)) * 100 if count else None
 
 
 def get_username(uid):
@@ -181,7 +181,7 @@ def get_label_for_task(task_id):
     cursor = g.conn.execute("SELECT L.lid, L.name, L.color from label_task LT INNER JOIN label L on LT.label_id = L.lid where LT.task_id = (%s)", task_id)
     labels = []
     for r in cursor:
-        labels.append(dict(lid=r[0], name=r[1], color=r[2]))
+        labels.append(dict(lid=r[0], name=r[1], color=r[2], task_id=task_id))
     cursor.close()
     return labels
 

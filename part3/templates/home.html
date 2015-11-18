@@ -156,6 +156,9 @@
         </div>
 
         <div class="col-sm-9 col-sm-offset-3 col-md-8 col-md-offset-4 main">
+            {% if n.edit %}
+            <a><span title="Delete List" onclick="deletetable('list', {id: {{n.lid}}})" class="glyphicon glyphicon-remove" aria-hidden="true" style="margin-left: 15px;float: right; margin-right: 15 px;"></span></a>
+            {% endif %}
             <h2 style="text-align: center; text-transfrom: capitalize;">{{n.name}}</h2>
             <div style="height: 15px;">
               <p style="float: right;">Owner:{{n.owner}}</p>
@@ -166,8 +169,8 @@
             <form action="/create/accessible_user" method="post" style="margin-bottom: 40px;">
               <input name="list_id" value="{{n.lid}}" type="hidden" id="input-name" class="form-control" required>
               <input name="email" type="email" id="input-email" class="form-control" placeholder="Sharing is Caring (please put email address)" required>
-              <input type="radio" name="type" value="true" checked>Can edit
-              <input type="radio" name="type" value="false">View only
+              <input type="radio" name="type" value="true" hecked>&nbsp;Can edit
+              <input type="radio" name="type" value="false">&nbsp;View only
               <button class="btn btn-primary" type="submit" style="/*display: none;*/ float: right;">Share</button>
             </form>
             {% endif %}
@@ -212,11 +215,19 @@
                   {% if a.completeness != None %}
                       Complete Precentage: &nbsp;{{a.completeness}}%
                   {% endif %}
-                  {% for taglabel in a.label %}
-                  <span class="label label-{{taglabel.color}}" style="float:right; margin-right: 5px;">{{taglabel.name}}</span>
-                  {% endfor %}
                   {% if n.edit %}
+                  {% for taglabel in a.label %}
+                  
+                  <button class="btn label-{{taglabel.color}} btn-xs" title="Delete Label" onclick="deletetable('label_task', {id: {{taglabel.task_id}}}, {id:{{taglabel.lid}}}})" style="float:right; margin-right: 5px; text-transform: uppercase;">&nbsp;{{taglabel.name}}&nbsp;</button>
+                  {% endfor %}
+      
                   <a><span title="Delete task" onclick="deletetable('task', {id: {{a.tid}}})" class="glyphicon glyphicon-remove" aria-hidden="true" style="margin-left: 15px;"></span></a>
+                  {% else %}
+                  {% for taglabel in a.label %}
+                  <button class="btn label-{{taglabel.color}} btn-xs" title="Delete Label" onclick="deletetable('label_task', {id: {{taglabel.task_id}}}, {id:{{taglabel.lid}}}})" style="float:right; margin-right: 5px; text-transform: uppercase;" disabled>&nbsp;{{taglabel.name}}&nbsp;</button>
+                  {% endfor %}
+
+
                   {% endif %}
                 </p>
                 <p>Description: {{a.description}}</p>

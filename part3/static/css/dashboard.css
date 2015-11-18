@@ -124,28 +124,36 @@ body {
  * costum label color
  */
 .label-blue {
-  background-color:#3498db
+  background-color:#3498db;
+  color: #ffffff;
 }
 .label-red {
-  background-color:#e74c3c
+  background-color:#e74c3c;
+  color: #ffffff;
 }
 .label-green {
-  background-color:#2ecc71
+  background-color:#2ecc71;
+  color: #ffffff;
 }
 .label-orange {
-  background-color:#e67e22
+  background-color:#e67e22;
+  color: #ffffff;
 }
 .label-white {
-  background-color:#95a5a6
+  background-color:#95a5a6;
+  color: #ffffff;
 }
 .label-black {
-  background-color:#000000
+  background-color:#000000;
+  color: #ffffff;
 }
 .label-yellow {
-  background-color:#3498db
+  background-color:#3498db;
+  color: #ffffff;
 }
 .label-purple {
-  background-color:#9b59b6
+  background-color:#9b59b6;
+  color: #ffffff;
 }
 
 
