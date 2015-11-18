@@ -199,10 +199,13 @@ class InsertQuery:
     self.values.append(value)
 
   def execute(self):
-    query = 'INSERT INTO {} ({}) VALUES ({}) RETURNING *;'.format(
-        self.table_name, ', '.join(self.keys), ', '.join(self.ses))
-    print 'EXECUTING QUERY:', query, 'params:', self.values
-    return g.conn.execute(query, self.values).fetchone()
+    try:
+      query = 'INSERT INTO {} ({}) VALUES ({}) RETURNING *;'.format(
+          self.table_name, ', '.join(self.keys), ', '.join(self.ses))
+      print 'EXECUTING QUERY:', query, 'params:', self.values
+      return g.conn.execute(query, self.values).fetchone()
+    except:
+      return None
 
 
 #
@@ -356,8 +359,12 @@ def create(table):
 
     result = query.execute()
 
-    # add owner to accessible_list when user new list
+    if not result:
+      flash('Cannot create {}. Please check your input!'.format(table))
+      return redirect(url_for('index'))
+
     if table == 'list':
+      # add owner to accessible_list when user new list
       g.conn.execute('INSERT INTO accessible_user VALUES (%s, %s, %s)',
                      uid, result[0], 'true')
     elif table == 'task':
