@@ -218,13 +218,13 @@
                   {% if n.edit %}
                   {% for taglabel in a.label %}
                   
-                  <button class="btn label-{{taglabel.color}} btn-xs" title="Delete Label" onclick="deletetable('label_task', {id: {{taglabel.task_id}}}, {id:{{taglabel.lid}}}})" style="float:right; margin-right: 5px; text-transform: uppercase;">&nbsp;{{taglabel.name}}&nbsp;</button>
+                  <button class="btn label-{{taglabel.color}} btn-xs" title="Delete Label" onclick="deletetable('label_task', {id: {{taglabel.task_id}}, id2:{{taglabel.lid}}})" style="float:right; margin-right: 5px; text-transform: uppercase;">&nbsp;{{taglabel.name}}&nbsp;</button>
                   {% endfor %}
       
                   <a><span title="Delete task" onclick="deletetable('task', {id: {{a.tid}}})" class="glyphicon glyphicon-remove" aria-hidden="true" style="margin-left: 15px;"></span></a>
                   {% else %}
                   {% for taglabel in a.label %}
-                  <button class="btn label-{{taglabel.color}} btn-xs" title="Delete Label" onclick="deletetable('label_task', {id: {{taglabel.task_id}}}, {id:{{taglabel.lid}}}})" style="float:right; margin-right: 5px; text-transform: uppercase;" disabled>&nbsp;{{taglabel.name}}&nbsp;</button>
+                  <button class="btn label-{{taglabel.color}} btn-xs" title="Delete Label" onclick="deletetable('label_task', {id: {{taglabel.task_id}}, id2:{{taglabel.lid}}})" style="float:right; margin-right: 5px; text-transform: uppercase;" disabled>&nbsp;{{taglabel.name}}&nbsp;</button>
                   {% endfor %}
 
 

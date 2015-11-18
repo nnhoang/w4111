@@ -382,16 +382,19 @@ def delete(table):
     query = InsertQuery(table)
     print "DELETING:", request.args
     row_id = request.args['id']
-    row_id2 = request.args['id2'] if 'row_id2' in request.args else None
+    row_id2 = request.args['id2'] if 'id2' in request.args else None
 
     # TODO check for user right
+    print row_id, row_id2
     if table in primarykeys:
       g.conn.execute('DELETE FROM {} WHERE {} = %s;'.format(table, primarykeys[table]), row_id)
+      flash('{} deleted.'.format(table.capitalize()))
     elif table == 'label_task' and row_id2:
-      g.conn.execute('DELETE FROM %s WHERE task_id = %s AND label_id = %s;',
-                     table, row_id, row_id2)
+      print 'DELETING LABEL_TASK'
+      g.conn.execute('DELETE FROM {} WHERE task_id = %s AND label_id = %s;'.format(table),
+                     row_id, row_id2)
+      flash('{} deleted.'.format(table.capitalize()))
 
-    flash('{} deleted.'.format(table.capitalize()))
     return 'done'
   return 'error'
 
