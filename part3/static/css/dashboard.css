@@ -119,3 +119,33 @@ body {
 #dashboard input {
   margin: 10px 0;
 }
+
+/*
+ * costum label color
+ */
+.label-blue {
+  background-color:#3498db
+}
+.label-red {
+  background-color:#e74c3c
+}
+.label-green {
+  background-color:#2ecc71
+}
+.label-orange {
+  background-color:#e67e22
+}
+.label-white {
+  background-color:#95a5a6
+}
+.label-black {
+  background-color:#000000
+}
+.label-yellow {
+  background-color:#3498db
+}
+.label-purple {
+  background-color:#9b59b6
+}
+
+
