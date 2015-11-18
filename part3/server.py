@@ -151,6 +151,7 @@ def get_comments(lid):
         comments.append(dict(cid=r[0], since=r[1], content=r[2], list_id=r[3], sender=get_username(r[4])))
     cursor.close()
     return comments
+
 def check_accessible(list_id, aid):
     cursor = g.conn.execute("SELECT AU.type FROM accessible_user AU WHERE AU.list_id=(%s) AND AU.account_id=(%s)", list_id, aid)
     accessible = cursor

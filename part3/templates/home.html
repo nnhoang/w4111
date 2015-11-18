@@ -99,12 +99,14 @@
             </div>
  -->
         <!-- create list -->
+        <div class="col-sm-11 col-md-11 main">
         <form style="width: 50%; float: right;" action="/create/list" method="post">
           <h2>Create a List</h2>
           <label for="input-name" class="sr-only">List Name</label>
           <input name="name" type="text" id="input-name" class="form-control" placeholder="List Name" required autofocus>
           <button class="btn btn-lg btn-primary btn-block" type="submit">Create List</button>
         </form>
+        </div>
         <!-- /create list -->
         <div class="tab-content">
         {% for n in list_result %}
@@ -125,17 +127,16 @@
                         <button type="submit" class="btn btn-primary">Send</button>
                     </form>
                     </div>
-                    <div>{{n.comments}}</div>
+                   
                     <div class="row">                                                  
                          {% for c in n.comments %}
-                         <li>{{c.content}}{{c.since}} by {{c.username}}</li>
+                         </br>
+                         <pre>{{c.content}} {{c.since}} by {{c.sender}}</pre>
                          {% endfor %}
                      </div>
                 </div>
 
                 <div class="col-sm-9 col-sm-offset-3 col-md-8 col-md-offset-4 main">
-                    <div class="row">
-                    <div class="col-sm-12 col-md-12"> 
                         <h2 style="text-align: center;">{{n.name}}</h2>
                         <div style="height: 10px;">
                             <p style="float: right;">Owner:{{n.owner}}</p>
@@ -151,27 +152,20 @@
                                 <p>{{a.description}}</p>
 
                                 {% if a.status %}
-                                <p>Completed by {{a.when_complete}}</p>
+                                <pre>Completed by {{a.when_complete}}</pre>
                                 {% else %}
                                 <pre>Due Date: {{a.due}}  Assigned to: {{a.assigned_to}} Last Editor: {{a.last_editor}}</pre> 
                                 {% endif %}
                                 
-                                <div class="row">
-                                <div class="col-sm-12 col-md-12">
-
+                                
                                 {% for m in a.checklist %}
                                 <li>{{m.name}} Status:{{m.status}}</li>
                                 {% endfor %}
-
-                                </div>
-                                </div>
                             {% else %}
                                 <li><em>No task yet. Enter more Task</em>
                             {% endfor %}
                         </div>
-                        {% endfor %}    
-                    </div> 
-                    </div>   
+                        {% endfor %}
                 </div>
                 </div>
             </div>
