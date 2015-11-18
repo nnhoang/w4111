@@ -137,10 +137,10 @@ def get_labels(lid):
     return labels
 
 def get_task_underlabel(label_id):
-    task_cursor = g.conn.execute("SELECT * FROM task T WHERE T.list_id = (%s);", label_id)
+    task_cursor = g.conn.execute("SELECT * From task T INNER JOIN label_task LT ON LT.task_id = T.tid WHERE LT.label_id=(%s);", label_id)
     tasks=[]
     for result in task_cursor:
-        tasks.append(dict(tid=result[0], checklist=get_checklist(result[0]),due=result[1],description=result[2], name=result[3], assigned_to=get_username(result[4]), last_editor=get_username(result[5]), status=result[7], when_completed=result[8]))
+        tasks.append(dict(tid=result[0], label=get_label_for_task(result[0]), checklist=get_checklist(result[0]), due=result[1], description=result[2], name=result[3], assigned_to=get_username(result[4]), last_editor=get_username(result[5]), status=result[7], when_completed=result[8]))
     task_cursor.close()
     return tasks
 

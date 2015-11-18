@@ -148,7 +148,7 @@
                             padding: 5px 20px 15px;">
               <h3 style="color: {{i.color}}; text-align: center;">{{i.name}}</h3>
               {% for a in i.task %}
-
+                <div>{{a.label}}</div>
                 <p>
                   {{a.name}}
                   <a><span title="Delete task" onclick="deletetable('task', {tid: '10'})" class="glyphicon glyphicon-remove" aria-hidden="true" style="margin-left: 15px;"></span></a>
@@ -156,7 +156,7 @@
                 <p>{{a.description}}</p>
 
                 {% if a.status %}
-                <pre>Completed by {{a.when_complete}}</pre>
+                <pre>Completed by {{a.when_completed}}</pre>
                 {% else %}
                 <pre>Due Date: {{a.due}}  Assigned to: {{a.assigned_to}} Last Editor: {{a.last_editor}}</pre> 
                 {% endif %}
