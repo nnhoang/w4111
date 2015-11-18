@@ -65,20 +65,7 @@
           <div class="row">
  -->
 
-<!--   <br/><div class="alert alert-info" role="alert">ALERT</div>
-  {% with messages = get_flashed_messages() %}
-  {% if messages %}
-  <ul class="flashes">
-    {% for m in messages %}
-    <div class="alert alert-info" role="alert">{{ m }}</div>
-    {% endfor %}
-  </ul>
-  {% endif %}
-  {% endwith %}
-  {% if error %}
-  <div class="alert alert-danger" role="alert">{{ error }}</div>
-  {% endif %}
- -->
+
 <!--                     </div>    
           <div class="row">
           <form>
@@ -98,6 +85,28 @@
       </div>
       </div>
  -->
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div class="col-sm-11 col-md-11 main">
+      <div style="width: 50%; float: right;">
+        <ul class="flashes">
+          {% for m in messages %}
+          <div class="alert alert-info" role="alert">{{ m }}</div>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+    {% endif %}
+    {% endwith %}
+    {% if error %}
+    <div class="col-sm-11 col-md-11 main">
+      <div style="width: 50%; float: right;">
+        <div class="alert alert-danger" role="alert">{{ error }}</div>
+      </div>
+    </div>
+    {% endif %}
+
     <!-- create list -->
     <div class="col-sm-11 col-md-11 main">
     <form style="width: 50%; float: right;" action="/create/list" method="post">

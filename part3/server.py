@@ -342,6 +342,12 @@ def create(table):
           flash('You cannot add yourself.')
         return redirect(url_for('index'))
 
+    elif table == 'label':
+      color = request.form['color']
+      if color and color not in ('blue', 'red', 'green', 'orange', 'white', 'black', 'yellow', 'purple'):
+        flash('You cannot choose color {}'.format(color))
+        return redirect(url_for('index'))
+
     result = query.execute()
 
     # add owner to accessible_list when user new list
