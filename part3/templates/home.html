@@ -132,7 +132,8 @@
                     <div class="row">                                                  
                          {% for c in n.comments %}
                          </br>
-                         <pre>{{c.content}} {{c.since}} by {{c.sender}}</pre>
+                         <p>{{c.content}}</p>
+                         <p>{{c.since}} by {{c.sender}}</p>
                          {% endfor %}
                      </div>
                 </div>
@@ -149,7 +150,7 @@
                             <h3 style="color: {{i.color}}; text-align: center;">{{i.name}}</h3>
                             {% for a in i.task %}
 
-                                <p>{{a.name}}</p>
+                                <U><p style="text-tansform: capitalized">{{a.name}}</p></U>
                                 <p>{{a.description}}</p>
 
                                 {% if a.status %}
