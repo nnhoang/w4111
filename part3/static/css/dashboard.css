@@ -115,3 +115,7 @@ body {
   display: inline-block;
   border-radius: 50%;
 }
+
+#dashboard input {
+  margin: 10px 0;
+}
