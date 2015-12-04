@@ -88,21 +88,26 @@ CREATE TABLE label (
 
 
 -- UDF and trigger
-CREATE FUNCTION checkColor(id int, color text) RETURN void
+DROP FUNCTION checkColor() CASCADE;
+CREATE FUNCTION checkColor() RETURNS trigger
 AS $$
 BEGIN
-	IF color in ('blue', 'red', 'green', 'orange', 'white', 'black', 'yellow', 'purple') THEN
-		DELETE FROM label WHERE label.lid = id;
-		RAISE 'Invalid label color'
-	END IF;
+  IF NEW.optional->>'color' in ('blue', 'red', 'green', 'orange', 'white', 'black', 'yellow', 'purple') THEN
+    -- DELETE FROM label WHERE label.lid = NEW.lid;
+    RAISE 'Invalid label color';
+    RETURN NULL;
+  END IF;
+  RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
 CREATE TRIGGER insertLabel
-	AFTER INSERT ON label
+  BEFORE INSERT ON label
 FOR EACH ROW
-	EXECUTE PROCEDURE checkColor(NEW.lid, NEW.optional->>'color');
+  EXECUTE PROCEDURE checkColor();
 
-
-
-
+-- test queries
+-- this one should work
+INSERT INTO label(optional, list_id) VALUES ('{"name": "part3", "color": "blue"}', 20);
+-- this one should NOT work
+INSERT INTO label(optional, list_id) VALUES ('{"name": "part3", "color": "abc"}', 20);
