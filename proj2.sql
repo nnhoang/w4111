@@ -7,16 +7,22 @@ ON L.lid = A.list_id
 WHERE A.account_id = 1
 AND (T.optional->>'due')::timestamp < '01/02/2016';
 
+/*
 SELECT *
 FROM task T JOIN accessible_user A
 ON (T.optional->>'assigned_to')::int = A.account_id;
+*/
 
---select all the red labels
+
+-- find all the task with red label assinged to user 3
 SELECT * 
-FROM label JOIN list 
-ON label.list_id = list.lid
-WHERE list.lid = 1
-AND (label.optional->>'color'::text) = 'red';
+FROM  task JOIN label_task
+ON task.tid = label_task.task_id
+WHERE assigned_to = 3
+AND label_id IN (SELECT label.lid
+                 FROM label
+                 WHERE (label.optional->>'color'::text) = 'red');
+
 
 CREATE TABLE account (
   aid serial PRIMARY KEY,
