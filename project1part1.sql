@@ -69,6 +69,24 @@ CREATE TABLE label_task (
 -- To drop all tables
 -- drop table accessible_user, account, checklist, comment, label, label_task, list, task;
 
+-- for Project 2
+CREATE TABLE task (
+  tid serial PRIMARY KEY,
+  name varchar(100) NOT NULL,
+  last_editor int NOT NULL,
+  assigned_to int,
+  optional json,
+  list_id int NOT NULL REFERENCES list(lid) ON DELETE CASCADE,
+  status boolean DEFAULT FALSE,
+  when_completed timestamp,
+  CHECK ((status = TRUE AND when_completed is NOT NULL)
+    OR (status = FALSE AND when_completed is NULL)),
+  FOREIGN KEY (assigned_to, list_id) REFERENCES accessible_user(account_id, list_id),
+  FOREIGN KEY (last_editor, list_id) REFERENCES accessible_user(account_id, list_id)
+);
+
+-- inside the OSOn optional (due timestamp, description text)
+
 
 -- interesting queries
 -- the number of times user 'Eugene' has tasks with different label colors
