@@ -85,3 +85,24 @@ CREATE TABLE label (
   list_id int NOT NULL REFERENCES list(lid) ON DELETE CASCADE
 );
 -- inside JSON (  name varchar(20), color varchar(10))
+
+
+-- UDF and trigger
+CREATE FUNCTION checkColor(id int, color text) RETURN void
+AS $$
+BEGIN
+	IF color in ('blue', 'red', 'green', 'orange', 'white', 'black', 'yellow', 'purple') THEN
+		DELETE FROM label WHERE label.lid = id;
+		RAISE 'Invalid label color'
+	END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER insertLabel
+	AFTER INSERT ON label
+FOR EACH ROW
+	EXECUTE PROCEDURE checkColor(NEW.lid, NEW.optional->>'color');
+
+
+
+
