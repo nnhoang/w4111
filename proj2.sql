@@ -11,6 +11,13 @@ SELECT *
 FROM task T JOIN accessible_user A
 ON (T.optional->>'assigned_to')::int = A.account_id;
 
+--select all the red labels
+SELECT * 
+FROM label JOIN list 
+ON label.list_id = list.lid
+WHERE list.lid = 1
+AND (label.optional->>'color'::text) = 'red';
+
 CREATE TABLE account (
   aid serial PRIMARY KEY,
   email text NOT NULL UNIQUE,
