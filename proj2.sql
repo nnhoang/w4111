@@ -7,9 +7,22 @@ ON L.lid = A.list_id
 WHERE A.account_id = 1
 AND (T.optional->>'due')::timestamp < '01/02/2016';
 
+/*
 SELECT *
 FROM task T JOIN accessible_user A
 ON (T.optional->>'assigned_to')::int = A.account_id;
+*/
+
+
+-- find all the task with red label assinged to user 3
+SELECT * 
+FROM  task JOIN label_task
+ON task.tid = label_task.task_id
+WHERE assigned_to = 3
+AND label_id IN (SELECT label.lid
+                 FROM label
+                 WHERE (label.optional->>'color'::text) = 'red');
+
 
 CREATE TABLE account (
   aid serial PRIMARY KEY,
@@ -43,8 +56,7 @@ CREATE TABLE comment (
 
 CREATE TABLE task (
   tid serial PRIMARY KEY,
-  due timestamp,
-  description text,
+  optional json,
   name varchar(100) NOT NULL,
   assigned_to int,
   last_editor int NOT NULL,
@@ -56,26 +68,13 @@ CREATE TABLE task (
   FOREIGN KEY (assigned_to, list_id) REFERENCES accessible_user(account_id, list_id),
   FOREIGN KEY (last_editor, list_id) REFERENCES accessible_user(account_id, list_id)
 );
+-- inside the JSON optional (due timestamp, description text)
 
 CREATE TABLE checklist (
   cid serial PRIMARY KEY,
   status boolean DEFAULT FALSE,
   name varchar(100) NOT NULL,
   task_id int NOT NULL REFERENCES task(tid) ON DELETE CASCADE
-);
-
-CREATE TABLE label (
-  lid serial PRIMARY KEY,
-  name varchar(20),
-  color varchar(10),
-  CHECK (color IN ('blue', 'red', 'green', 'orange', 'white', 'black', 'yellow', 'purple')),
-  list_id int NOT NULL REFERENCES list(lid) ON DELETE CASCADE
-);
-
-CREATE TABLE label_task (
-  task_id int NOT NULL REFERENCES task(tid) ON DELETE CASCADE,
-  label_id int NOT NULL REFERENCES label(lid) ON DELETE CASCADE,
-  UNIQUE (task_id, label_id)
 );
 
 -- new label table
@@ -85,6 +84,17 @@ CREATE TABLE label (
   list_id int NOT NULL REFERENCES list(lid) ON DELETE CASCADE
 );
 -- inside JSON (  name varchar(20), color varchar(10))
+
+CREATE TABLE label_task (
+  task_id int NOT NULL REFERENCES task(tid) ON DELETE CASCADE,
+  label_id int NOT NULL REFERENCES label(lid) ON DELETE CASCADE,
+  UNIQUE (task_id, label_id)
+);
+
+
+
+-- To drop all tables
+-- drop table accessible_user, account, checklist, comment, label, label_task, list, task;
 
 
 -- UDF and trigger
